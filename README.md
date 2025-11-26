@@ -42,5 +42,7 @@
 -  npm run dev
 
 > 启动系统了。
-> 如果上面操作顺利，正常情况下，访问 http://localhost:3000/
+> 如果上面操作顺利，正常情况下，访问 http://localhost:3000/， 进入管理界面
+
+![管理界面](https://raw.githubusercontent.com/g089h515r806/nextcrawler/0d91acc4bb6a7fd552557199ddb901e74a41dc24/public/file/images/demo.jpg)
 
