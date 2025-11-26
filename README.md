@@ -16,30 +16,30 @@
 
 ### 数据库
 > 目前我们默认支持的是MYSQL，我们使用JSON字段存储任意数据，所以需要MYSQL最低版本5.7。MYSQL的安装请参考官方文档。
-> Pgsql、sqlite目前测试
+-  Pgsql、sqlite目前测试
 
 ### Node.js版本
 > 我们使用的是react19，next.js16。最低Node版本20.9.
 
 ### 安装流程
 > (1),下载了源代码以后，使用npm 命令安装依赖
-> npm install
+-  npm install
  
 > (2),Playwright包安装以后，需要执行特有的安装步骤，用来安装下载使用的浏览器。
-> npx playwright install
+-  npx playwright install
 
 > (3), Prisma
 >   数据库安装好了以后，启动数据库；请修改.env文件中的数据库连接信息，设置正确的数据库连接设置正确。
-DATABASE_URL="mysql://root:root@localhost:3306/nextcrawler"
+- DATABASE_URL="mysql://root:root@localhost:3306/nextcrawler"
 
 > 创建对应的数据库：
-> create database nextcrawler;
+-  create database nextcrawler;
 
 > 数据库初始化：
-> npx prisma migrate dev --name init
+-  npx prisma migrate dev --name init
 
 > 完成了上述操作，就可以使用
-> npm run dev
+-  npm run dev
 
 > 启动系统了。
 > 如果上面操作顺利，正常情况下，访问 http://localhost:3000/
