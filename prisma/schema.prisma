@@ -1,0 +1,133 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  name     String   @unique @db.VarChar(255)
+  password String
+  status   Boolean  @default(true)
+  created  DateTime @default(now()) @db.Timestamp(6)
+  changed  DateTime @updatedAt
+
+  @@index([name])
+  @@index([created])
+}
+
+model Feed {
+  id          Int        @id @default(autoincrement())
+  created     DateTime   @default(now()) @db.Timestamp(6)
+  changed     DateTime   @updatedAt
+  label       String     @db.VarChar(1024)
+  url         String     @db.VarChar(512)
+  interval    Int        @default(1440)
+  nextTime    DateTime   @default(now()) @db.Timestamp(6)
+  //抓取状态,0,未抓取;1，抓取成功;2，抓取失败；  
+  fetchStatus Int
+  //种子级别,1, A,优秀; 2，B,一般，3，C,较差，4，D,废弃
+  grade       Int        @default(2)
+  useTemplate    Boolean    @default(false)
+  
+  template  Template?    @relation(fields: [tcode], references: [code], onDelete: NoAction, onUpdate: NoAction) 
+  tcode   String?    @db.VarChar(32)
+  
+  config      Json
+  items       Item[]
+  listpages    Listpage[]
+
+  @@index([url(length: 100)])
+  @@index([created])
+  @@index([nextTime])
+}
+
+model Item {
+  id          Int      @id @default(autoincrement())
+  created     DateTime @default(now()) @db.Timestamp(6)
+  changed     DateTime @updatedAt
+  title       String
+  url         String   @db.VarChar(1024)
+  content     String   @db.LongText
+  interval    Int      @default(1440000)
+  nextTime    DateTime @default(now())
+  //抓取状态,0,未抓取;1，抓取成功;2，抓取失败；  
+  fetchStatus Int
+  //是否推送到发布平台
+  synced      Boolean  @default(false)
+  //是否经过处理，比如AI、人工加工处理、清理
+  processed      Boolean  @default(false)
+  data        Json
+  feed        Feed?    @relation(fields: [feedId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  feedId      Int?
+
+  @@index([url(length: 100)])
+  @@index([created])
+}
+
+model Watchdog {
+  id       Int      @id @default(autoincrement())
+  created  DateTime @default(now()) @db.Timestamp(6)
+  type     String
+  //The severity level of the event;,ranges from 0 (Emergency) to 7 (Debug);0,EMERGENCY; 1,ALERT; 2,CRITICAL; 3,ERROR; 4,WARNING; 5,NOTICE; 6,INFO; 7,DEBUG
+  severity Int
+  message  String   @db.LongText
+  location String
+  hostname String
+  referer  String
+
+  @@index([type, severity])
+  @@index([created])
+}
+
+model Config {
+  key   String @unique
+  value Json
+
+  @@index([key])
+}
+
+model Proxy {
+  id      Int      @id @default(autoincrement())
+  label   String   @db.VarChar(255)
+  server  String   @unique @db.VarChar(255)
+  username  String   @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  status  Boolean  @default(false)
+  created DateTime @default(now()) @db.Timestamp(6)
+  changed DateTime @updatedAt
+
+  @@index([created])
+}
+
+model Listpage {
+  id          Int      @id @default(autoincrement())
+  created     DateTime @default(now()) @db.Timestamp(6)
+  changed     DateTime @updatedAt
+  url         String   @db.VarChar(512)
+  interval    Int      @default(1440)
+  nextTime    DateTime @default(now()) @db.Timestamp(6)
+  //抓取状态,0,未抓取;1，抓取成功;2，抓取失败；  
+  fetchStatus Int
+  feed        Feed?    @relation(fields: [feedId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  feedId      Int?
+
+  @@index([url(length: 100)])
+  @@index([created])
+  @@index([nextTime])
+}
+
+model Template {
+  id      Int      @id @default(autoincrement())
+  label   String   @db.VarChar(255)
+  code    String   @unique @db.VarChar(32)
+  config  Json
+  feeds   Feed[]
+  created DateTime @default(now()) @db.Timestamp(6)
+  changed DateTime @updatedAt
+
+  @@index([created])
+}
