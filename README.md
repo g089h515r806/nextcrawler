@@ -47,3 +47,8 @@
 
 ![管理界面](https://raw.githubusercontent.com/g089h515r806/nextcrawler/0d91acc4bb6a7fd552557199ddb901e74a41dc24/public/file/images/demo.jpg)
 
+## 视频教程
+> 作者录制了相关的视频教程，放在了抖音上
+- [Next Crawler 简介](https://www.douyin.com/video/7578491830568832302)
+- [Next Crawler 安装](https://www.douyin.com/video/7578493339683573042)
+- [爬取示例1:简单资讯新闻](https://www.douyin.com/video/7578494081442286857)
