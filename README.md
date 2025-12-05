@@ -10,14 +10,15 @@
 - 支持采集模板，并且支持导入导出;
 - 支持代理;
 - 支持错误日志;
-- 可选的基本用户认证管理。
-
+- 可选的基本用户认证管理;
+- 支持浏览器持久化上下文(完全真实浏览器);
+- 支持采集评论。
 
 ## 安装指南
 
 ### 数据库
 > 目前我们默认支持的是MYSQL，我们使用JSON字段存储任意数据，所以需要MYSQL最低版本5.7。MYSQL的安装请参考官方文档。
--  Pgsql、sqlite目前测试
+-  Pgsql、sqlite目前尚未测试
 
 ### Node.js版本
 > 我们使用的是react19，next.js16。最低Node版本20.9.
@@ -52,3 +53,6 @@
 - [Next Crawler 简介](https://www.douyin.com/video/7578491830568832302)
 - [Next Crawler 安装](https://www.douyin.com/video/7578493339683573042)
 - [爬取示例1:简单资讯新闻](https://www.douyin.com/video/7578494081442286857)
+- [爬取示例2:爬取出版社图书信息,字段映射与转换](https://www.douyin.com/video/7578809442225884479)
+- [爬取示例3:采集模板规则的使用](https://www.douyin.com/video/7579251571523996969)
+- [爬取示例4:浏览器动作的使用](https://www.douyin.com/video/7579919925095992617)
