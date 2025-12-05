@@ -20,8 +20,24 @@ import {
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
 
-export default function FeedAddPage() {
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+
+export default function SystemConfigPage() {
 
   const [item, setItem] = useState({
 	limitNumFeed: 2,
@@ -29,6 +45,10 @@ export default function FeedAddPage() {
 	limitNumItem: 5,
 	useProxy: false,
 	useCronJob: false,
+	usePersistentContext:false,
+    userDataDir:"",
+	channel:"",
+	headless: false,
   });
   
   //const [status, setStatus] = React.useState(false);
@@ -63,6 +83,25 @@ export default function FeedAddPage() {
 	//console.log("newItem", newItem);
     setItem(newItem);
   };
+  
+  const handleUsePersistentContextChange = (value) => {
+	let newItem = {
+      ...item,
+      usePersistentContext: value
+    };
+	//console.log("newItem", newItem);
+    setItem(newItem);
+  };
+
+  const handleHeadlessChange = (value) => {
+	let newItem = {
+      ...item,
+      headless: value
+    };
+	//console.log("newItem", newItem);
+    setItem(newItem);
+  };  
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 	
@@ -83,7 +122,11 @@ export default function FeedAddPage() {
 			  limitNumListPage:parseInt(item.limitNumListPage),
 			  limitNumItem:parseInt(item.limitNumItem),	
 			  useProxy: item.useProxy || false,	
-			  useCronJob: item.useCronJob || false,			  
+			  useCronJob: item.useCronJob || false,
+			  usePersistentContext:item.usePersistentContext || false,
+			  userDataDir:item.userDataDir || "",
+			  channel: item.channel || "",
+			  headless: item.headless || false,		  
 		  }
  
 		}),
@@ -118,6 +161,10 @@ export default function FeedAddPage() {
 			limitNumItem: value.limitNumItem || 5,
 			useProxy: value.useProxy || false,
 			useCronJob: value.useCronJob || false,
+			usePersistentContext:value.usePersistentContext || false,
+			userDataDir:value.userDataDir || "",
+			channel: value.channel || "",
+			headless: value.headless || false,					
 		})
 		
       })
@@ -125,14 +172,20 @@ export default function FeedAddPage() {
 
 
   return (
-    <div className="">
-      <main className="">
-      <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="text-xl"> 系统设置 </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form  onSubmit={handleSubmit}>
+    <div className="font-sans grid items-center justify-items-center p-8 pb-20 sm:p-20">
+   <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start w-full">
+        <div className="w-full justify-items-center"> <h2 className="text-2xl font-bold">系统设置 </h2></div>
+	  
+      <Tabs defaultValue="cron" className="w-full justify-items-center">
+	    <form  onSubmit={handleSubmit}>
+        <TabsList>
+          <TabsTrigger value="cron">定时任务</TabsTrigger>
+          <TabsTrigger value="browser">浏览器</TabsTrigger>
+        </TabsList>
+        <TabsContent value="cron">
+          <Card>
+            <CardContent className="grid gap-6">	
+
             <FieldGroup>
 
               <Field>
@@ -166,21 +219,67 @@ export default function FeedAddPage() {
 					  <Label htmlFor="useCronJob">启用定时采集任务</Label>
 					</div>
 				  </div>
-
+            </FieldGroup>
+			
+	        </CardContent>
+		  </Card>
+		</TabsContent>
+		
+        <TabsContent value="browser">
+          <Card>
+            <CardContent className="grid gap-6">
 				<div className="flex items-start gap-3">
 					<Checkbox id="useProxy" name="useProxy" checked={item.useProxy} onCheckedChange={handleUseProxyChange} />
 					<div className="grid gap-2">
 					  <Label htmlFor="useProxy">使用代理</Label>
 					</div>
-				  </div>		  	  
+				  </div>
+				  
+				<div className="flex items-start gap-3">
+					<Checkbox id="usePersistentContext" name="usePersistentContext" checked={item.usePersistentContext} onCheckedChange={handleUsePersistentContextChange} />
+					<div className="grid gap-2">
+					  <Label htmlFor="usePersistentContext">使用持久化上下文(Persistent Context)</Label>
+					</div>
+				  </div>				  
+				<div className="flex items-start gap-3">
+					<Checkbox id="headless" name="headless" checked={item.headless} onCheckedChange={handleHeadlessChange} />
+					<div className="grid gap-2">
+					  <Label htmlFor="headless">无头模式(headless)</Label>
+					</div>
+				  </div>				  
+              <Field>
+                <FieldLabel htmlFor="userDataDir">用户数据目录(userDataDir)</FieldLabel>
+                <Input
+                  id="userDataDir"
+				  name="userDataDir"
+                  type="text"
+				  value={item.userDataDir}
+				  onChange={handleChange}
+
+                />
+              </Field>
 			  
               <Field>
-                <Button type="submit">保存</Button>
-              </Field>
-            </FieldGroup>
-          </form>
-        </CardContent>
-      </Card>
+                <FieldLabel htmlFor="channel">channel(通道)</FieldLabel>
+                <Input
+                  id="channel"
+				  name="channel"
+                  type="text"
+				  value={item.channel}
+				  onChange={handleChange}
+
+                />
+              </Field>			  
+			  
+	        </CardContent>
+		  </Card>
+		</TabsContent>
+		
+		    <Field><Button type="submit">保存</Button></Field>
+		
+		</form>
+	  </Tabs>
+
 
       </main>
     </div>
