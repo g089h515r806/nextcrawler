@@ -107,7 +107,13 @@ const FeedConfigForm = forwardRef((props, ref) => {
 		
 		
 		let fieldsTmpInItem = [...fieldsInItem];
-		fieldsTmpInItem = fieldsTmpInItem.filter((ele, idx) => ele.name !=  "");			
+		fieldsTmpInItem = fieldsTmpInItem.filter((ele, idx) => ele.name !=  "");
+
+		let fieldsTmpInComment = [...fieldsInComment];
+		fieldsTmpInComment = fieldsTmpInComment.filter((ele, idx) => ele.name !=  "");		
+
+		let fieldsTmpInComment2 = [...fieldsInComment2];
+		fieldsTmpInComment2 = fieldsTmpInComment2.filter((ele, idx) => ele.name !=  "");
 		
 		let configTmp = {
 		    feedParser:{
@@ -121,6 +127,14 @@ const FeedConfigForm = forwardRef((props, ref) => {
 			  downloadContentImg:downloadContentImg,
 			  fields:fieldsTmpInItem,
 			},
+		    commentParser:{
+			  scrapeComment:scrapeComment,
+			  scrapeComment2:scrapeComment2,
+			  commentSelector:commentSelector,
+			  commentSelector2:commentSelector2,
+			  fields:fieldsTmpInComment,
+			  fields2:fieldsTmpInComment2,
+			},			
             feedActions	:feedActions,
 			itemActions	:itemActions,			
 		};
@@ -162,6 +176,26 @@ const FeedConfigForm = forwardRef((props, ref) => {
 	},
   ]); 
   
+  const [fieldsInComment, setFieldsInComment] = useState([
+    {   
+      name: '',
+      selector: '',
+	  attribute:'',
+      transformer:'',
+      transformerArg:'',	  
+	},
+  ]); 
+
+  const [fieldsInComment2, setFieldsInComment2] = useState([
+    {   
+      name: '',
+      selector: '',
+	  attribute:'',
+      transformer:'',
+      transformerArg:'',	  
+	},
+  ]);  
+  
   
   const [feedActions, setFeedActions] = useState([]); 
   
@@ -176,6 +210,14 @@ const FeedConfigForm = forwardRef((props, ref) => {
   const [disableScrapeItem, setDisableScrapeItem] = React.useState(false); 
   const [disableAutoScrapeContent, setDisableAutoScrapeContent] = React.useState(false); 
   const [downloadContentImg, setDownloadContentImg] = React.useState(false);  
+  
+ 
+  const [scrapeComment, setScrapeComment] = React.useState(false);
+  const [scrapeComment2, setScrapeComment2] = React.useState(false);
+  
+  const [commentSelector, setCommentSelector] = React.useState("");
+  const [commentSelector2, setCommentSelector2] = React.useState("");
+ 
   //const [feedActionDialogOpen, setFeedActionDialogOpen] = React.useState(false);
   
   //const [itemActionDialogOpen, setItemActionDialogOpen] = React.useState(false);
@@ -285,6 +327,87 @@ const FeedConfigForm = forwardRef((props, ref) => {
 
   }  
   
+  
+  
+  const handleFieldsChangeInComment = (index, e) => {
+  //handleFieldsChange(index, e){
+     //let data = this.state.parserFields || [];
+	 console.log("handleFieldsChange", e); 
+	let newFieldsInComment = [...fieldsInComment]; 
+    newFieldsInComment[index][e.target.name] = e.target.value;
+    setFieldsInComment(newFieldsInComment); 
+  } 
+
+  const handleCommentTransformerChange = (index, value) => {
+	let newFieldsInComment = [...fieldsInComment]; 
+    newFieldsInComment[index]["transformer"] = value;
+    setFieldsInComment(newFieldsInComment);
+  } 
+  
+  
+  const addEmptyFieldInComment = (e) => {
+    e.preventDefault();  
+
+	//console.log("addFields", e);    
+	
+    let newfield = { name: '', selector: '', attribute: '', transformer:'', transformerArg:'', }
+	
+	setFieldsInComment([...fieldsInComment, newfield]);
+
+
+  }
+  
+  const removeFieldsInComment = (index, e) => {
+    e.preventDefault();    
+
+	// console.log("removeFields", index); 
+    let newFieldsInComment = [...fieldsInComment2];
+    newFieldsInComment.splice(index, 1)
+
+    setFieldsInComment(newFieldsInComment);	 
+
+  }   
+  
+
+  const handleFieldsChangeInComment2 = (index, e) => {
+  //handleFieldsChange(index, e){
+     //let data = this.state.parserFields || [];
+	 console.log("handleFieldsChange", e); 
+	let newFieldsInComment2 = [...fieldsInComment2]; 
+    newFieldsInComment2[index][e.target.name] = e.target.value;
+    setFieldsInComment2(newFieldsInComment2); 
+  } 
+
+  const handleComment2TransformerChange = (index, value) => {
+	let newFieldsInComment2 = [...fieldsInComment2]; 
+    newFieldsInComment2[index]["transformer"] = value;
+    setFieldsInComment2(newFieldsInComment2);
+  } 
+  
+  
+  const addEmptyFieldInComment2 = (e) => {
+    e.preventDefault();  
+
+	//console.log("addFields", e);    
+	
+    let newfield = { name: '', selector: '', attribute: '', transformer:'', transformerArg:'', }
+	
+	setFieldsInComment2([...fieldsInComment2, newfield]);
+
+
+  }
+  
+  const removeFieldsInComment2 = (index, e) => {
+    e.preventDefault();    
+
+	// console.log("removeFields", index); 
+    let newFieldsInComment2 = [...fieldsInComment2];
+    newFieldsInComment2.splice(index, 1)
+
+    setFieldsInComment2(newFieldsInComment2);	 
+
+  } 
+
 
 
   const addAction = (type, e) => {
@@ -463,6 +586,16 @@ const FeedConfigForm = forwardRef((props, ref) => {
 		setFieldsInItem(fieldsTmpInItem);
 	}
 	
+	let fieldsTmpInComment = feedConfig?.commentParser?.fields || [];
+	if(fieldsTmpInComment.length > 0){
+		setFieldsInComment(fieldsTmpInComment);
+	}
+
+	let fieldsTmpInComment2 = feedConfig?.commentParser?.fields2 || [];
+	if(fieldsTmpInComment2.length > 0){
+		setFieldsInComment2(fieldsTmpInComment2);
+	}
+	
 	let feedActionsTmp = feedConfig?.feedActions || [];
 	if(feedActionsTmp.length > 0){
 		setFeedActions(feedActionsTmp);
@@ -480,6 +613,18 @@ const FeedConfigForm = forwardRef((props, ref) => {
 	let downloadContentImgTmp = feedConfig?.itemParser?.downloadContentImg || false;
     setDownloadContentImg(downloadContentImgTmp);
 	
+	let scrapeCommentTmp = feedConfig?.commentParser?.scrapeComment || false;
+    setScrapeComment(scrapeCommentTmp);	
+	
+	let scrapeComment2Tmp = feedConfig?.commentParser?.scrapeComment2 || false;
+    setScrapeComment2(scrapeComment2Tmp);	
+	
+	let commentSelectorTmp = feedConfig?.commentParser?.commentSelector || "";
+    setCommentSelector(commentSelectorTmp);	
+	
+	let commentSelector2Tmp = feedConfig?.commentParser?.commentSelector2 || "";
+    setCommentSelector2(commentSelector2Tmp);	
+	
   }, []);
 
   return (
@@ -490,6 +635,7 @@ const FeedConfigForm = forwardRef((props, ref) => {
           <TabsTrigger value="feed">种子采集配置</TabsTrigger>
           <TabsTrigger value="page">分页采集配置</TabsTrigger>
 		  <TabsTrigger value="item">详情采集配置</TabsTrigger>
+		  <TabsTrigger value="comment">评论采集配置</TabsTrigger>
         </TabsList>
         <TabsContent value="feed">
           <Card>
@@ -784,7 +930,169 @@ const FeedConfigForm = forwardRef((props, ref) => {
 
 		    </CardContent>
 		  </Card>			
+	    </TabsContent>	
+
+
+ <TabsContent value="comment">
+          <Card>
+            <CardContent className="grid gap-6">
+			
+			<div className="flex items-start gap-3">
+				<Checkbox id="scrapeComment" name="scrapeComment" checked={scrapeComment} onCheckedChange={setScrapeComment} />
+				<div className="grid gap-2">
+				  <Label htmlFor="scrapeComment">抓取评论</Label>
+				</div>
+			</div>
+			
+
+
+           	<Field>
+				<div className="flex items-center">
+				  <FieldLabel htmlFor="commentSelector">一级评论选择器</FieldLabel>
+				</div>
+				<Input id="commentSelector" name="commentSelector" type="text"  value={commentSelector} onChange={(e) => setCommentSelector(e.target.value)} />
+			  </Field>	
+
+		  
+			
+		 <Table>
+		   <TableHeader>
+			 <TableRow>
+			   <TableHead>字段名</TableHead>
+			   <TableHead>选择器</TableHead>
+			   <TableHead>属性名</TableHead>
+			   <TableHead>转换器</TableHead>
+			   <TableHead>转换参数</TableHead>		   
+			   <TableHead>删除</TableHead>
+			 </TableRow>
+		   </TableHeader>
+		   <TableBody>
+			 {fieldsInComment.map((field, index) => (
+			   <TableRow key={index}>
+				 <TableCell>
+					<Input name="name" type="text"  value={field.name} onChange={(e) => handleFieldsChangeInComment(index, e)} />
+				 </TableCell>
+				 <TableCell>
+					<Input name="selector" type="text"  value={field.selector} onChange={(e) => handleFieldsChangeInComment(index, e)} />
+				 </TableCell>
+				 <TableCell>
+					 <Input name="attribute" type="text"  value={field.attribute} onChange={(e) => handleFieldsChangeInComment(index, e)} />
+				 </TableCell>
+				 <TableCell>
+				 
+					<Select name="transformer" value={ field.transformer} onValueChange={ (value) => handleCommentTransformerChange(index, value)}>
+					  <SelectTrigger className="w-[180px]">
+						<SelectValue placeholder="选择转换器" />
+					  </SelectTrigger>
+					  <SelectContent>
+						<SelectGroup>
+						
+						  <SelectItem value={null}>None</SelectItem>
+						 {data.transformerOptions.map((transformerOption, index) => (
+						
+						  <SelectItem key={index} value={transformerOption.key}>{transformerOption.label}</SelectItem>
+						  ))
+						 }						
+
+						</SelectGroup>
+					  </SelectContent>
+					</Select>				 
+					
+				 </TableCell>
+				 <TableCell>
+					 <Input name="transformerArg" type="text"  value={field.transformerArg} onChange={(e) => handleFieldsChangeInComment(index, e)} />
+				 </TableCell>			 
+				 
+				 <TableCell>
+				   <Button onClick={(e) => removeFieldsInComment(index, e)}>删除</Button>
+				 </TableCell>
+
+			   </TableRow>
+			 ))}
+		   </TableBody>
+		 </Table>		  
+			
+		 <Button className="w-48" onClick={(e) => addEmptyFieldInComment(e)}>添加一级评论字段映射</Button>
+		 
+
+			<div className="flex items-start gap-3">
+				<Checkbox id="scrapeComment2" name="scrapeComment2" checked={scrapeComment2} onCheckedChange={setScrapeComment2} />
+				<div className="grid gap-2">
+				  <Label htmlFor="scrapeComment2">抓取二级评论</Label>
+				</div>
+			</div>
+			
+           	<Field>
+				<div className="flex items-center">
+				  <FieldLabel htmlFor="commentSelector2">二级评论选择器</FieldLabel>
+				</div>
+				<Input id="commentSelector2" name="commentSelector2" type="text"  value={commentSelector2} onChange={(e) => setCommentSelector2(e.target.value)} />
+			  </Field>	
+			  
+
+		 <Table>
+		   <TableHeader>
+			 <TableRow>
+			   <TableHead>字段名</TableHead>
+			   <TableHead>选择器</TableHead>
+			   <TableHead>属性名</TableHead>
+			   <TableHead>转换器</TableHead>
+			   <TableHead>转换参数</TableHead>		   
+			   <TableHead>删除</TableHead>
+			 </TableRow>
+		   </TableHeader>
+		   <TableBody>
+			 {fieldsInComment2.map((field, index) => (
+			   <TableRow key={index}>
+				 <TableCell>
+					<Input name="name" type="text"  value={field.name} onChange={(e) => handleFieldsChangeInComment2(index, e)} />
+				 </TableCell>
+				 <TableCell>
+					<Input name="selector" type="text"  value={field.selector} onChange={(e) => handleFieldsChangeInComment2(index, e)} />
+				 </TableCell>
+				 <TableCell>
+					 <Input name="attribute" type="text"  value={field.attribute} onChange={(e) => handleFieldsChangeInComment2(index, e)} />
+				 </TableCell>
+				 <TableCell>
+				 
+					<Select name="transformer" value={ field.transformer} onValueChange={ (value) => handleComment2TransformerChange(index, value)}>
+					  <SelectTrigger className="w-[180px]">
+						<SelectValue placeholder="选择转换器" />
+					  </SelectTrigger>
+					  <SelectContent>
+						<SelectGroup>
+						
+						  <SelectItem value={null}>None</SelectItem>
+						 {data.transformerOptions.map((transformerOption, index) => (
+						
+						  <SelectItem key={index} value={transformerOption.key}>{transformerOption.label}</SelectItem>
+						  ))
+						 }						
+
+						</SelectGroup>
+					  </SelectContent>
+					</Select>				 
+					
+				 </TableCell>
+				 <TableCell>
+					 <Input name="transformerArg" type="text"  value={field.transformerArg} onChange={(e) => handleFieldsChangeInComment2(index, e)} />
+				 </TableCell>			 
+				 
+				 <TableCell>
+				   <Button onClick={(e) => removeFieldsInComment2(index, e)}>删除</Button>
+				 </TableCell>
+
+			   </TableRow>
+			 ))}
+		   </TableBody>
+		 </Table>		  
+			
+		 <Button className="w-48" onClick={(e) => addEmptyFieldInComment2(e)}>添加二级评论字段映射</Button>			 
+
+		    </CardContent>
+		  </Card>			
 	    </TabsContent>		
+		
       </Tabs>
 	
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
