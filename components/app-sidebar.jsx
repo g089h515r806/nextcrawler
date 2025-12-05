@@ -82,6 +82,10 @@ const data = {
           title: "系统配置",
           url: "/admin/config/system",
         },
+        {
+          title: "测试链接",
+          url: "/admin/test",
+        },		
       ],
     },
 
