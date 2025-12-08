@@ -12,7 +12,7 @@ export async function GET(request,{ params }) {
 		    template: true,
 		  },		  
 		})
-		console.log("feed", feed);
+		//console.log("feed", feed);
 		
 		let ret = await FeedService.fetchFeedOnly(feed);
 		if(!ret){

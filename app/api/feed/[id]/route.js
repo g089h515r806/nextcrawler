@@ -35,7 +35,7 @@ export async function PATCH(request,{ params }) {
   try {
 	  const feedObject = await request.json();
 	  const { id } = await params;
-	  console.log("feedObject", feedObject);
+	  //console.log("feedObject", feedObject);
 	  //let label = proxyObject.label || '';
 	  //let url = proxyObject.url || '';
 	  //let status = proxyObject.status || false;
