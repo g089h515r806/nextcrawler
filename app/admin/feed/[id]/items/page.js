@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/empty"
 
 import  ItemFetchButton  from "@/components/item-fetch-button"
-
+import  FetchBatchFetchButton  from "@/components/feed-batchfetch-button"
 
 export default async function FeedItemsPage({ params, searchParams,}) {
   const { id } = await params
@@ -107,6 +107,9 @@ export default async function FeedItemsPage({ params, searchParams,}) {
 	  <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start w-full">
 		<div className="w-full justify-items-center"> <h2 className="text-2xl font-bold">条目列表 </h2></div>
 
+<div className="w-full flex flex-row-reverse"><FetchBatchFetchButton id={ id } /></div>
+
+
     <div className="w-full">
 	
 	{ items.length > 0 && (
@@ -114,7 +117,7 @@ export default async function FeedItemsPage({ params, searchParams,}) {
        <TableHeader>
          <TableRow>
            <TableHead>ID</TableHead>
-           <TableHead>标题/网址</TableHead>
+           <TableHead className="w-128 whitespace-break-spaces break-all">标题/网址</TableHead>
 
 		   <TableHead>抓取状态</TableHead>
 		   <TableHead>运行</TableHead>
@@ -126,7 +129,7 @@ export default async function FeedItemsPage({ params, searchParams,}) {
          {items.map((row) => (
            <TableRow key={row.id}>
              <TableCell>{row.id}</TableCell>
-             <TableCell>
+             <TableCell className="w-128 whitespace-break-spaces break-all">
 			 	<div>{row.title}</div>
 				<div>{row.url}</div>
 			 </TableCell>
