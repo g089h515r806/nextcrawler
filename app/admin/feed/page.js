@@ -133,7 +133,7 @@ const { page = '0',pageSize='20', label = '', url = '', fetchStatus = '', grade 
        <TableHeader>
          <TableRow>
            <TableHead>ID</TableHead>
-           <TableHead>标签/网址</TableHead>
+           <TableHead className="w-128 whitespace-break-spaces break-all">标签/网址</TableHead>
 
 		   <TableHead>抓取状态</TableHead>
 		   <TableHead>运行</TableHead>

@@ -12,10 +12,10 @@ export async function GET(request) {
 	
   try{
     await testFetch();
-	return new Response({ "title":"success" }, { status: 200 })
+	return new Response(JSON.stringify({ msg:"success" }), { status: 200 })
   }catch (err) {
 	console.log("err", err);
-	return new Response({ "title":"error" }, { status: 500 })
+	return new Response(JSON.stringify({ msg:"error" }), { status: 500 })
   } 	
   //const res = await request.json()
   /*

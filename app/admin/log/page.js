@@ -114,7 +114,7 @@ export default async function LogPage({searchParams,}) {
              <TableCell>{row.id}</TableCell>
              <TableCell>{row.type}</TableCell>
 			  <TableCell>{row.severity}</TableCell>
-             <TableCell className="w-128 whitespace-break-spaces"><p className="break-normal">{row.message}</p></TableCell>
+             <TableCell className="w-128 whitespace-break-spaces break-all"><p className="break-normal">{row.message}</p></TableCell>
 			 <TableCell><Link href={ '/admin/log/' + row.id + ''}>查看</Link></TableCell>
 			 <TableCell><Link href={ '/admin/log/' + row.id + '/delete'}>删除</Link></TableCell>
            </TableRow>

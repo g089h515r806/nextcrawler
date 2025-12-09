@@ -123,7 +123,7 @@ const { page = '0',pageSize='20', sort = 'asc', query = '' } = await searchParam
          {listpages.map((row) => (
            <TableRow key={row.id}>
              <TableCell>{row.id}</TableCell>
-             <TableCell>{row.url}</TableCell>
+             <TableCell className="w-128 whitespace-break-spaces break-all">{row.url}</TableCell>
 			 <TableCell>{getFetchStatusText(row.fetchStatus)}</TableCell>
 			 <TableCell><ListpageFetchButton id={""+row.id}/></TableCell>
 			 <TableCell><Link href={ '/admin/listpage/' + row.id + '/edit'}>编辑</Link></TableCell>

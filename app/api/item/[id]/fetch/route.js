@@ -16,7 +16,7 @@ export async function GET(request,{ params }) {
 			  },
 		  },		  
 		})
-		console.log("item", item);
+		//console.log("item", item);
 		
 		let ret = await FeedService.fetchItemOnly(item);
 		if(!ret){

@@ -124,7 +124,7 @@ export default async function FeedListpagesPage({params, searchParams,}) {
        <TableHeader>
          <TableRow>
            <TableHead>ID</TableHead>
-           <TableHead>网址</TableHead>
+           <TableHead className="w-128 whitespace-break-spaces break-all">网址</TableHead>
 		   <TableHead>抓取状态</TableHead>
 		   <TableHead>运行</TableHead>
 		   <TableHead>编辑</TableHead>
@@ -135,7 +135,7 @@ export default async function FeedListpagesPage({params, searchParams,}) {
          {listpages.map((row) => (
            <TableRow key={row.id}>
              <TableCell>{row.id}</TableCell>
-             <TableCell>{row.url}</TableCell>
+             <TableCell className="w-128 whitespace-break-spaces break-all">{row.url}</TableCell>
 			 <TableCell>{getFetchStatusText(row.fetchStatus)}</TableCell>
 			  <TableCell><ListpageFetchButton id={""+row.id}/></TableCell>
 			 <TableCell><Link href={ '/admin/listpage/' + row.id + '/edit'}>编辑</Link></TableCell>

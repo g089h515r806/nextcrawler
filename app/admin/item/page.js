@@ -125,7 +125,7 @@ const { page = '0',pageSize='20', title = '', url = '' } = await searchParams
        <TableHeader>
          <TableRow>
            <TableHead>ID</TableHead>
-           <TableHead>标题/网址</TableHead>
+           <TableHead className="w-128 whitespace-break-spaces break-all">标题/网址</TableHead>
            
 		   <TableHead>抓取状态</TableHead>
 		    <TableHead>运行</TableHead>
@@ -137,7 +137,7 @@ const { page = '0',pageSize='20', title = '', url = '' } = await searchParams
          {items.map((row) => (
            <TableRow key={row.id}>
              <TableCell>{row.id}</TableCell>
-             <TableCell>
+             <TableCell className="w-128 whitespace-break-spaces break-all">
 			 
 			 <div>{row.title}</div>
 			 <div>{row.url}</div>

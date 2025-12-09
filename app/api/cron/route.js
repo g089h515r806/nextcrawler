@@ -6,7 +6,7 @@ export async function GET(request) {
 
   try{
     await runCronJob();
-	return new Response(null, { status: 200 })
+	return new Response(null, { status: 204 })
   }catch (err) {
 	console.log("err", err);
 	return new Response(null, { status: 500 })

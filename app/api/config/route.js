@@ -21,11 +21,11 @@ export async function GET(request) {
 		key: key,
 	  },
 	})
-	 return new Response(JSON.stringify(config), { status: 200 })
+	return new Response(JSON.stringify(config), { status: 200 })
   }catch (err) {
-  console.log("err", err);
-      //ctx.throw(422);
-	  return new Response(null, { status: 500 })
+    console.log("err", err);
+    //ctx.throw(422);
+	return new Response(null, { status: 500 })
   }
 }
 
@@ -65,7 +65,7 @@ export async function POST(request) {
 	  //https://www.prisma.io/docs/orm/prisma-client/queries/crud
 	  
 	  //return Response.json(proxy)
-	  return new Response(null, { status: 200 })
+	  return new Response(null, { status: 204 })
   }catch (err) {
   console.log("err", err);
       //ctx.throw(422);

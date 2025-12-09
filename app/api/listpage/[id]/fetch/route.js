@@ -16,7 +16,7 @@ export async function GET(request,{ params }) {
 			  },
 		  },
 		})
-		console.log("listpage", listpage);
+		//console.log("listpage", listpage);
 		
 		let ret = await FeedService.fetchListPageOnly(listpage);
 		if(!ret){
