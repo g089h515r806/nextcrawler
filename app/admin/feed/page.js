@@ -125,7 +125,7 @@ const { page = '0',pageSize='20', label = '', url = '', fetchStatus = '', grade 
     <div className="font-sans grid items-center justify-items-center p-8 pb-20 sm:p-20">
    <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start w-full">
         <div className="w-full justify-items-center"> <h2 className="text-2xl font-bold">种子管理 </h2></div>
-		<div className="w-full flex flex-row-reverse"><Button className="w-32"><Link href={ '/admin/feed/add'}>添加种子</Link></Button></div>
+		<div className="w-full flex flex-row-reverse"><Button className="w-32 ml-8"><Link href={ '/admin/feed/export'}>导出种子</Link></Button><Button className="w-32 ml-8"><Link href={ '/admin/feed/import'}>导入种子</Link></Button><Button className="w-32"><Link href={ '/admin/feed/add'}>添加种子</Link></Button></div>
 		<FeedSearchForm />
     <div className="w-full">
 	 { feeds.length > 0 && (

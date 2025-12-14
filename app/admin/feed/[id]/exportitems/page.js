@@ -1,6 +1,7 @@
 //import Image from "next/image";
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
+
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
   Pagination,
@@ -19,12 +20,46 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty"
 import { Button } from "@/components/ui/button"
-import  ItemFetchButton  from "@/components/item-fetch-button"
-import  FetchBatchFetchButton  from "@/components/feed-batchfetch-button"
+
+import  ExportItemsButton  from "@/components/feed-exportitems-button"
+
+const getExportFields = (feed) => {
+    let fields = ["id", "title","url","content"];
+	//console.log("feed", feed);
+	let config = {};
+    if(feed?.useTemplate){
+		config = feed?.template?.config || {}
+	}else{
+		config = feed?.config || {}
+	}	
+	let fields1 = config?.feedParser?.fields || [];
+    for(var i = 0; i < fields1.length; i++){		  
+	  let parserField = fields1[i];
+	  
+	  let name = parserField['name'] || "";
+	  if(name != "" && fields.indexOf(name) == -1){
+		 fields.push(name); 
+	  }
+	}
+    //console.log("fields1", fields1);			  
+    let fields2 = config?.itemParser?.fields || [];
+    for(var i = 0; i < fields2.length; i++){		  
+	  let parserField = fields2[i];
+	  
+	  let name = parserField['name'] || "";
+	  if(name != "" && fields.indexOf(name) == -1){
+		 fields.push(name);
+         //console.log("name", name);		 
+	  }
+	}
+    //console.log("fields2", fields2);	
+	//console.log("fields", fields);
+	return fields;
+}; 
 
 export default async function FeedItemsPage({ params, searchParams,}) {
   const { id } = await params
-  const { page = '0',pageSize='20', sort = 'asc', query = '' } = await searchParams
+  const { page = '0',pageSize='500', sort = 'asc', query = '' } = await searchParams
   //console.log("searchParams", searchParams);
   //console.log("request", request);
   let pageInt = parseInt(page);
@@ -52,8 +87,21 @@ export default async function FeedItemsPage({ params, searchParams,}) {
 	   contains: query,
 	};
   }
+  
+  const feed = await prisma.feed.findUnique({
+	  where: {
+		id: parseInt(id),
+	  },
+	  include: {
+		template: true,
+	  },		  
+	})
+  let exportFields = getExportFields(feed);
+  
   const items = await prisma.item.findMany(filters);
   const itemCount = await prisma.item.count(filtersTotal);
+  
+  //console.log("items", items);
   
   const totalPageNo = Math.ceil(itemCount /  pageSizeInt) ;
   //if(totalPageNo = 0)
@@ -68,7 +116,7 @@ export default async function FeedItemsPage({ params, searchParams,}) {
 	  pageItems.push({
 		id:"first",
 		label:"首页",
-		url:"/admin/feed/"+ id +"/items?page=0",
+		url:"/admin/feed/"+ id +"/exportitems?page=0",
 	  })
   }
   
@@ -76,7 +124,7 @@ export default async function FeedItemsPage({ params, searchParams,}) {
 	pageItems.push({
 		id: start,
 		label: start,
-		url:"/admin/feed/"+ id +"/items?page=" + (start-1),
+		url:"/admin/feed/"+ id +"/exportitems?page=" + (start-1),
 		isActive: (start-1) == pageInt ? true:false,
 	}) 
 	start++;
@@ -85,62 +133,62 @@ export default async function FeedItemsPage({ params, searchParams,}) {
 	  pageItems.push({
 		id:"last",
 		label:"末页",
-		url:"/admin/feed/"+ id +"/items?page=" + (totalPageNo-1),
+		url:"/admin/feed/"+ id +"/exportitems?page=" + (totalPageNo-1),
 	  })
   }
 
-  const getFetchStatusText = (fetchStatus) => {
-    let fetchStatusText = "";
-	if(fetchStatus == 0){
-		fetchStatusText = "未抓取";
-	}else if(fetchStatus == 1){
-		fetchStatusText = "成功";
-	}else if(fetchStatus == 2){
-		fetchStatusText = "失败";
+  const getFieldText = (item, fieldName) => {
+	let defaultFields = ["id", "title","url","content"];
+	let ret = "";
+    if(defaultFields.indexOf(fieldName) != -1){
+	  ret = item[fieldName];
+	  return ret;
 	}
 	
-	return fetchStatusText;
+	ret = item.data[fieldName] || "";
+	
+	if(typeof ret !== 'string'){
+		ret = JSON.stringify(ret)
+	}
+	
+	return ret;
   };
+  
+ 
+  
+ 
 
   return (
     <div className="font-sans grid items-center justify-items-center p-8 pb-20 sm:p-20">
 	  <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start w-full">
-		<div className="w-full justify-items-center"> <h2 className="text-2xl font-bold">条目列表 </h2></div>
+		<div className="w-full justify-items-center"> <h2 className="text-2xl font-bold">导出条目 </h2></div>
 
-		<div className="w-full flex flex-row-reverse">
-			<Button className="w-32 ml-8"><Link href={ '/admin/feed/' + id + '/exportitems'}>导出条目</Link></Button>
-			<FetchBatchFetchButton id={ id } />
-		</div>
+<div className="w-full flex flex-row-reverse"> <ExportItemsButton /> </div>
 
 
     <div className="w-full">
 	
 	{ items.length > 0 && (
-     <Table>
+     <Table id="feed-items-table">
        <TableHeader>
          <TableRow>
-           <TableHead>ID</TableHead>
-           <TableHead className="w-128 whitespace-break-spaces break-all">标题/网址</TableHead>
+		 
+		  {exportFields.map((exportField, index) => (
+		    <TableHead key={"" + index} className={index>2 ? 'w-64 whitespace-break-spaces break-all hidden' : 'w-64 whitespace-break-spaces break-all'}>{exportField}</TableHead>
+			
+		  ))}
 
-		   <TableHead>抓取状态</TableHead>
-		   <TableHead>运行</TableHead>
-		   <TableHead>编辑</TableHead>
-		   <TableHead>删除</TableHead>
          </TableRow>
        </TableHeader>
        <TableBody>
          {items.map((row) => (
            <TableRow key={row.id}>
-             <TableCell>{row.id}</TableCell>
-             <TableCell className="w-128 whitespace-break-spaces break-all">
-			 	<div>{row.title}</div>
-				<div>{row.url}</div>
-			 </TableCell>
+		  {exportFields.map((exportField, index) => (
+		    <TableCell key={"" + row.id + index} className={index>2 ? 'w-64 whitespace-break-spaces break-all hidden' : 'w-64 whitespace-break-spaces break-all'}>{getFieldText(row, exportField)}</TableCell>
+		
+		  ))}		   
 
-			 <TableCell>{getFetchStatusText(row.fetchStatus)}</TableCell>
-			 <TableCell><ItemFetchButton id={""+row.id}/></TableCell>
-			 <TableCell><Link href={ '/admin/item/' + row.id + '/edit'}>编辑</Link></TableCell>
-			 <TableCell><Link href={ '/admin/item/' + row.id + '/delete'}>删除</Link></TableCell>
+
            </TableRow>
          ))}
        </TableBody>
