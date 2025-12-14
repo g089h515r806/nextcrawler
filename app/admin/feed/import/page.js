@@ -66,6 +66,9 @@ export default function FeedExportPage() {
       <Input id="feeds-file" name="feeds-file" type="file" onChange={ handleFileChange }/>
 	  
 	  <Button onClick={() => importFeeds()}>导入种子</Button>
+	  
+	  <a href="/feedsdemo.xlsx">下载示例种子文件</a>
+
     </div>
 		
     <div className="w-full">
