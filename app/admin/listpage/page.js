@@ -36,6 +36,7 @@ const { page = '0',pageSize='20', sort = 'asc', query = '' } = await searchParam
   let filters = {
 	skip: pageInt * pageSizeInt, // Skip records for previous pages
 	take: pageSizeInt, // Limit to page size
+    orderBy: { id : 'desc',},
 	where: {},
   };
   if(query != ''){

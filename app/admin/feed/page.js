@@ -37,7 +37,8 @@ const { page = '0',pageSize='20', label = '', url = '', fetchStatus = '', grade 
   let filters = {
 	skip: pageInt * pageSizeInt, // Skip records for previous pages
 	take: pageSizeInt, // Limit to page size
-	 where: {},
+    orderBy: { id : 'desc',},
+	where: {},
   };
   if(label != ''){
     filters.where = {
