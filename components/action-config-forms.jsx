@@ -167,6 +167,77 @@ function SelectOptionConfigForm({ defaultConfig = {selector:"",value:"",}, onCon
   );
 }
 
+function WheelConfigForm({ defaultConfig = {deltaX:"",deltaY:"",}, onConfigChange }) {
+  const [config, setConfig] = useState(defaultConfig);	
+
+  const handleConfigChange = (e) => {
+    const { name, value } = e.target;
+	
+	let newConfig = {
+      ...config,
+      [name]: value
+    };
+	//console.log("newItem", newItem);
+    setConfig(newConfig);
+	if (onConfigChange) onConfigChange(newConfig);
+  };
+	
+  return (
+	  <form>
+		<FieldGroup>
+
+		  <Field>
+			<FieldLabel htmlFor="deltaX">水平滚动的距离(像素)</FieldLabel>
+			<Input name="deltaX" type="text" value={config.deltaX} onChange={handleConfigChange} />
+		  </Field>
+		  <Field>
+			<FieldLabel htmlFor="deltaY">垂直滚动的距离(像素)</FieldLabel>
+			<Input name="deltaY" type="text" value={config.deltaY} onChange={handleConfigChange} />
+		  </Field>			  
+
+		</FieldGroup>
+	  </form>
+  );
+}
+
+function LoopClickConfigForm({ defaultConfig = {selector:"",waitTime:"",}, onConfigChange }) {
+  const [config, setConfig] = useState(defaultConfig);	
+
+  const handleConfigChange = (e) => {
+    const { name, value } = e.target;
+	
+	let newConfig = {
+      ...config,
+      [name]: value
+    };
+	//console.log("newItem", newItem);
+    setConfig(newConfig);
+	if (onConfigChange) onConfigChange(newConfig);
+  };
+	
+  return (
+	  <form>
+		<FieldGroup>
+
+		  <Field>
+			<FieldLabel htmlFor="selector">选择器</FieldLabel>
+			<Input name="selector" type="text" value={config.selector} onChange={handleConfigChange} />
+		  </Field>
+		  <Field>
+			<FieldLabel htmlFor="subSelector">子元素选择器</FieldLabel>
+			<Input name="subSelector" type="text" value={config.subSelector} onChange={handleConfigChange} />
+		  </Field>		  
+		  
+		  <Field>
+			<FieldLabel htmlFor="waitTime">点击间隔时间</FieldLabel>
+			<Input name="waitTime" type="text" value={config.waitTime} onChange={handleConfigChange} />
+		  </Field>			  
+
+		</FieldGroup>
+	  </form>
+  );
+}
+
 function DefaultConfigForm({ defaultConfig = {selector:"",}, onConfigChange }) {
 	
   const [config, setConfig] = useState(defaultConfig);	
@@ -202,5 +273,7 @@ export {
   WaitForTimeoutConfigForm,
   GotoConfigForm,
   FillConfigForm,
+  WheelConfigForm,
+  LoopClickConfigForm,
   DefaultConfigForm,
 }

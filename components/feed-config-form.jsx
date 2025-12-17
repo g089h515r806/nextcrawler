@@ -53,6 +53,8 @@ import {
   WaitForTimeoutConfigForm,
   GotoConfigForm,
   FillConfigForm,
+  WheelConfigForm,
+  LoopClickConfigForm,  
   DefaultConfigForm,
 } from "@/components/action-config-forms"
 
@@ -70,6 +72,7 @@ const data = {
 	{key: "prefix", label: "prefix",},
 	{key: "replaceToEmpty", label: "replaceToEmpty",},
 	{key: "suffix", label: "suffix",},
+	{key: "substr", label: "substr",},
     {key: "trim", label: "trim",},
   ],
   
@@ -88,10 +91,12 @@ const data = {
 	{key: "dblclick", label: "dblclick",},
 	{key: "fill", label: "fill",},
     {key: "goto", label: "goto",},
+	{key: "loopClick", label: "loopClick",},
 	{key: "selectOption", label: "selectOption",},
 	{key: "uncheck", label: "uncheck",},	
 	{key: "waitFor", label: "waitFor",},
 	{key: "waitForTimeout", label: "waitForTimeout",},
+	{key: "wheel", label: "wheel",},
   ],  
 }
 
@@ -100,7 +105,7 @@ const FeedConfigForm = forwardRef((props, ref) => {
 	
   useImperativeHandle(ref, () => ({
     getValue: () => {
-		console.log("useImperativeHandle getValue");
+		//console.log("useImperativeHandle getValue");
 		//过滤name 为空的字段，
 		let fieldsTmp = [...fields];
 		fieldsTmp = fieldsTmp.filter((ele, idx) => ele.name !=  "");
@@ -157,43 +162,18 @@ const FeedConfigForm = forwardRef((props, ref) => {
   });
   
   const [fields, setFields] = useState([
-    {   
-      name: '',
-      selector: '',
-	  attribute:'',
-      transformer:'',
-      transformerArg:'',	  
-	},
   ]); 
   
   const [fieldsInItem, setFieldsInItem] = useState([
-    {   
-      name: '',
-      selector: '',
-	  attribute:'',
-      transformer:'',
-      transformerArg:'',	  
-	},
+
   ]); 
   
   const [fieldsInComment, setFieldsInComment] = useState([
-    {   
-      name: '',
-      selector: '',
-	  attribute:'',
-      transformer:'',
-      transformerArg:'',	  
-	},
+
   ]); 
 
   const [fieldsInComment2, setFieldsInComment2] = useState([
-    {   
-      name: '',
-      selector: '',
-	  attribute:'',
-      transformer:'',
-      transformerArg:'',	  
-	},
+
   ]);  
   
   
@@ -251,13 +231,15 @@ const FeedConfigForm = forwardRef((props, ref) => {
   const handleFieldsChange = (index, e) => {
   //handleFieldsChange(index, e){
      //let data = this.state.parserFields || [];
-	 console.log("handleFieldsChange", e); 
+	// console.log("handleFieldsChange", e); 
 	let newFields = [...fields]; 
     newFields[index][e.target.name] = e.target.value;
     setFields(newFields); 
   } 
 
   const handleFeedTransformerChange = (index, value) => {
+	//console.log("index",index)
+	//console.log("value",value)
 	let newFields = [...fields]; 
     newFields[index]["transformer"] = value;
     setFields(newFields); 
@@ -291,7 +273,7 @@ const FeedConfigForm = forwardRef((props, ref) => {
   const handleFieldsChangeInItem = (index, e) => {
   //handleFieldsChange(index, e){
      //let data = this.state.parserFields || [];
-	 console.log("handleFieldsChange", e); 
+	 //console.log("handleFieldsChange", e); 
 	let newFieldsInItem = [...fieldsInItem]; 
     newFieldsInItem[index][e.target.name] = e.target.value;
     setFieldsInItem(newFieldsInItem); 
@@ -332,7 +314,7 @@ const FeedConfigForm = forwardRef((props, ref) => {
   const handleFieldsChangeInComment = (index, e) => {
   //handleFieldsChange(index, e){
      //let data = this.state.parserFields || [];
-	 console.log("handleFieldsChange", e); 
+	 //console.log("handleFieldsChange", e); 
 	let newFieldsInComment = [...fieldsInComment]; 
     newFieldsInComment[index][e.target.name] = e.target.value;
     setFieldsInComment(newFieldsInComment); 
@@ -372,7 +354,7 @@ const FeedConfigForm = forwardRef((props, ref) => {
   const handleFieldsChangeInComment2 = (index, e) => {
   //handleFieldsChange(index, e){
      //let data = this.state.parserFields || [];
-	 console.log("handleFieldsChange", e); 
+	 //console.log("handleFieldsChange", e); 
 	let newFieldsInComment2 = [...fieldsInComment2]; 
     newFieldsInComment2[index][e.target.name] = e.target.value;
     setFieldsInComment2(newFieldsInComment2); 
@@ -423,7 +405,7 @@ const FeedConfigForm = forwardRef((props, ref) => {
   
   const removeAction = (index, type, e) => {
 	 e.preventDefault();   
-	 console.log("removeConfigAction", index); 
+	 //console.log("removeConfigAction", index); 
 	 
 	 if(type == "feed"){
 		let newFeedActions = [...feedActions];
@@ -440,7 +422,7 @@ const FeedConfigForm = forwardRef((props, ref) => {
   
   const editAction = (index, type, e) => {
 	 e.preventDefault();   
-	 console.log("editConfigAction", index);
+	 //console.log("editConfigAction", index);
     if(type == 'feed'){
 		let actionTmp = feedActions[index];
 		
@@ -461,7 +443,7 @@ const FeedConfigForm = forwardRef((props, ref) => {
 
   const saveAction = (e) => {
 	 e.preventDefault();   
-	 console.log("saveAction", e);
+	 //console.log("saveAction", e);
 	 if(currentActionType == 'feed'){
 		 
 		let newFeedActions = [...feedActions];
@@ -502,7 +484,7 @@ const FeedConfigForm = forwardRef((props, ref) => {
   const cancelAction = (e) => {
     e.preventDefault();  
 
-	console.log("cancelAction", e); 
+	//console.log("cancelAction", e); 
 
     setDialogOpen(false);
     setCurrentActionType('');
@@ -545,6 +527,10 @@ const FeedConfigForm = forwardRef((props, ref) => {
 		return <WaitForConfigForm defaultConfig={action.config || {selector:"", timeout:"",}} onConfigChange={handleActionConfigChange}/>;    
 	  }else if(name == "selectOption"){
 		return <SelectOptionConfigForm defaultConfig={action.config || {selector:"", value:"",}} onConfigChange={handleActionConfigChange}/>;    
+	  }else if(name == "wheel"){
+		return <WheelConfigForm defaultConfig={action.config || {deltaX:"", deltaY:"",}} onConfigChange={handleActionConfigChange}/>;    
+	  }else if(name == "loopClick"){
+		return <LoopClickConfigForm defaultConfig={action.config || {selector:"", waitTime:"",}} onConfigChange={handleActionConfigChange}/>;    
 	  }else{
 		return <DefaultConfigForm defaultConfig={action.config || {selector:"",}} onConfigChange={handleActionConfigChange}/>;    
 	  }
@@ -559,16 +545,17 @@ const FeedConfigForm = forwardRef((props, ref) => {
       ...currentAction,
       config: newConfig
     };
-	console.log("newConfig", newConfig);
+	//console.log("newConfig", newConfig);
     setCurrentAction(newCurrentAction);	
     //console.log("Child count updated:", newCount);
   };   
   
 
  useEffect(() => {
-	 
+	//console.log("props", props); 
 	let feedConfig = props.feedConfig || {}
-	console.log("feedConfig", feedConfig); 
+	//console.log("feedConfig", feedConfig); 
+	
 	 
 	setSelector(feedConfig?.feedParser?.selector || "");
 	
@@ -577,23 +564,59 @@ const FeedConfigForm = forwardRef((props, ref) => {
 	//let field
 	let fieldsTmp = feedConfig?.feedParser?.fields || [];
 	
-	console.log("fieldsTmp", fieldsTmp);
+	//console.log("fieldsTmp", fieldsTmp);
+	
+	
 	if(fieldsTmp.length > 0){
+		//setFields([...fieldsTmp]);
 		setFields(fieldsTmp);
+	}else{
+		setFields([{   
+		  name: '',
+		  selector: '',
+		  attribute:'',
+		  transformer:'',
+		  transformerArg:'',	  
+		}]);
 	}
+	
 	let fieldsTmpInItem = feedConfig?.itemParser?.fields || [];
 	if(fieldsTmpInItem.length > 0){
 		setFieldsInItem(fieldsTmpInItem);
+	}else{
+		setFieldsInItem([{   
+		  name: '',
+		  selector: '',
+		  attribute:'',
+		  transformer:'',
+		  transformerArg:'',	  
+		}]);
 	}
 	
 	let fieldsTmpInComment = feedConfig?.commentParser?.fields || [];
 	if(fieldsTmpInComment.length > 0){
 		setFieldsInComment(fieldsTmpInComment);
+	}else{
+		setFieldsInComment([{   
+		  name: '',
+		  selector: '',
+		  attribute:'',
+		  transformer:'',
+		  transformerArg:'',	  
+		}]);
 	}
 
 	let fieldsTmpInComment2 = feedConfig?.commentParser?.fields2 || [];
 	if(fieldsTmpInComment2.length > 0){
 		setFieldsInComment2(fieldsTmpInComment2);
+	}else{
+		setFieldsInComment2([{   
+		  name: '',
+		  selector: '',
+		  attribute:'',
+		  transformer:'',
+		  transformerArg:'',	  
+		}]);
 	}
 	
 	let feedActionsTmp = feedConfig?.feedActions || [];
@@ -624,6 +647,7 @@ const FeedConfigForm = forwardRef((props, ref) => {
 	
 	let commentSelector2Tmp = feedConfig?.commentParser?.commentSelector2 || "";
     setCommentSelector2(commentSelector2Tmp);	
+	
 	
   }, []);
 
