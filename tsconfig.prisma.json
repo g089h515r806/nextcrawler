@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "outDir": "./prisma/generated/prisma",
+    "rootDir": "./prisma/generated/prisma-ts",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "declaration": true,
+    "resolveJsonModule": true,
+  },
+  "include": ["./prisma/generated/prisma-ts"]
+}
