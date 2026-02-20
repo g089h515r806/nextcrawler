@@ -1,0 +1,172 @@
+{
+    "label": "微博",
+    "code": "weibo",
+    "config": {
+        "feedParser": {
+            "fields": [
+                {
+                    "name": "title",
+                    "selector": ".wbpro-feed-content",
+                    "attribute": "",
+                    "transformer": "substr",
+                    "transformerArg": "30"
+                },
+                {
+                    "name": "url",
+                    "selector": "//a[contains(@href, '#comment')]",
+                    "attribute": "href",
+                    "transformer": "absoluteUrl",
+                    "transformerArg": ""
+                }
+            ],
+            "selector": ".vue-recycle-scroller__item-view article"
+        },
+        "itemParser": {
+            "fields": [
+                {
+                    "name": "content",
+                    "selector": ".wbpro-feed-content",
+                    "attribute": "innerHTML",
+                    "transformer": "",
+                    "transformerArg": ""
+                },
+                {
+                    "name": "publishTime",
+                    "selector": "//a[contains(@class, 'head-info_time')]",
+                    "attribute": "",
+                    "transformer": "",
+                    "transformerArg": ""
+                },
+                {
+                    "name": "publishIp",
+                    "selector": "//div[contains(@class, 'head-info_ip')]",
+                    "attribute": "",
+                    "transformer": "",
+                    "transformerArg": ""
+                },
+                {
+                    "name": "source",
+                    "selector": "//div[contains(@class, 'head-info_source')]/a",
+                    "attribute": "",
+                    "transformer": "",
+                    "transformerArg": ""
+                }
+            ],
+            "disableScrapeItem": false,
+            "downloadContentImg": false,
+            "disableAutoScrapeContent": true
+        },
+        "pagination": {
+            "type": "none",
+            "selector": ""
+        },
+        "feedActions": [
+            {
+                "name": "waitForTimeout",
+                "phase": "afterGoto",
+                "config": {
+                    "timeout": "1000"
+                }
+            },
+            {
+                "name": "wheel",
+                "phase": "afterGoto",
+                "config": {
+                    "deltaX": "0",
+                    "deltaY": "1500"
+                }
+            },
+            {
+                "name": "waitForTimeout",
+                "phase": "afterGoto",
+                "config": {
+                    "timeout": "2000"
+                }
+            },
+            {
+                "name": "loopClick",
+                "phase": "afterGoto",
+                "config": {
+                    "selector": "article",
+                    "waitTime": "2000",
+                    "subSelector": "footer .woo-box-item-flex:nth-child(2) span"
+                }
+            }
+        ],
+        "itemActions": [
+            {
+                "name": "waitForTimeout",
+                "phase": "afterGoto",
+                "config": {
+                    "timeout": "2000"
+                }
+            }
+        ],
+        "commentParser": {
+            "fields": [
+                {
+                    "name": "comment",
+                    "selector": ".item1in .text > span",
+                    "attribute": "",
+                    "transformer": "",
+                    "transformerArg": ""
+                },
+                {
+                    "name": "username",
+                    "selector": ".item1in .text a:nth-child(1)",
+                    "attribute": "",
+                    "transformer": "",
+                    "transformerArg": ""
+                },
+                {
+                    "name": "publishTime",
+                    "selector": ".item1in .info > div:nth-child(1)",
+                    "attribute": "",
+                    "transformer": "substr",
+                    "transformerArg": "16"
+                },
+                {
+                    "name": "publishIp",
+                    "selector": ".item1in .info  >  div:nth-child(1) span",
+                    "attribute": "",
+                    "transformer": "",
+                    "transformerArg": ""
+                }
+            ],
+            "fields2": [
+                {
+                    "name": "comment",
+                    "selector": ".con2 .text span",
+                    "attribute": "",
+                    "transformer": "",
+                    "transformerArg": ""
+                },
+                {
+                    "name": "username",
+                    "selector": ".con2 .text a:nth-child(1)",
+                    "attribute": "",
+                    "transformer": "",
+                    "transformerArg": ""
+                },
+                {
+                    "name": "publishTime",
+                    "selector": ".con2 .info > div:nth-child(1)",
+                    "attribute": "",
+                    "transformer": "substr",
+                    "transformerArg": "16"
+                },
+                {
+                    "name": "publishIp",
+                    "selector": ".con2 .info  >  div:nth-child(1) span",
+                    "attribute": "",
+                    "transformer": "",
+                    "transformerArg": ""
+                }
+            ],
+            "scrapeComment": true,
+            "scrapeComment2": true,
+            "commentSelector": ".vue-recycle-scroller__item-view .item1",
+            "commentSelector2": ".list2 .item2"
+        }
+    }
+}
