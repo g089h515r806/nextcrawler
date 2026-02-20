@@ -38,6 +38,10 @@
 > 创建对应的数据库：
 -  create database nextcrawler;
 
+> 自1.0-beta5版本以后，prisma升级到了7.x，需要生成客户端代码, 请确保tsc命令可用(npm install -g typescript)
+-  npm run generateClient
+-  或者 npx prisma generate && tsc --project tsconfig.prisma.json
+
 > 数据库初始化：
 -  npx prisma migrate dev --name init
 
