@@ -24,7 +24,7 @@ import { Button } from "@/components/ui/button"
 import  ExportItemsButton  from "@/components/feed-exportitems-button"
 
 const getExportFields = (feed) => {
-    let fields = ["id", "title","url","content", "comments"];
+    let fields = ["id", "title","url","content", "image", "video", "author", "publishTime", "comments"];
 	//console.log("feed", feed);
 	let config = {};
     if(feed?.useTemplate){

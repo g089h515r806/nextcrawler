@@ -53,6 +53,10 @@ export default function ItemEditPage() {
     title: '',
     url: '',
 	content: '',
+    image: '',
+    video: '',
+    author: '',
+    publishTime: '',
 	fetchStatus: 0,
 	feedId: '',
   });
@@ -103,6 +107,10 @@ export default function ItemEditPage() {
 		    title: item.title,
 			url: item.url,
 			content: item.content,
+			image: item.image,
+			video: item.video,
+			author: item.author,
+			publishTime: item.publishTime,
 			feedId: parseInt(item.feedId),
 			fetchStatus: parseInt(item.fetchStatus),
 			data:dataJson,
@@ -138,6 +146,10 @@ export default function ItemEditPage() {
 		    title: dataItem.title || '',
 		    url: dataItem.url || '',
 		    content: dataItem.content || '',
+		    image: dataItem.image || '',
+		    video: dataItem.video || '',
+		    author: dataItem.author || '',
+		    publishTime: dataItem.publishTime || '',
 			feedId: dataItem.feedId || '',
 		    fetchStatus: dataItem.fetchStatus || 0,
 						
@@ -191,6 +203,33 @@ export default function ItemEditPage() {
                
               </Field>	
 			  
+              <Field>
+                <div className="flex items-center">
+                  <FieldLabel htmlFor="image">封面图像</FieldLabel>
+                </div>
+                <Input id="image" name="image" type="text"  value={item.image} onChange={handleChange} />
+              </Field>
+
+              <Field>
+                <div className="flex items-center">
+                  <FieldLabel htmlFor="video">视频</FieldLabel>
+                </div>
+                <Input id="video" name="video" type="text"  value={item.video} onChange={handleChange} />
+              </Field>
+
+              <Field>
+                <div className="flex items-center">
+                  <FieldLabel htmlFor="author">作者</FieldLabel>
+                </div>
+                <Input id="author" name="author" type="text"  value={item.author} onChange={handleChange} />
+              </Field>
+
+              <Field>
+                <div className="flex items-center">
+                  <FieldLabel htmlFor="publishTime">发布日期</FieldLabel>
+                </div>
+                <Input id="publishTime" name="publishTime" type="text"  value={item.publishTime} onChange={handleChange} />
+              </Field>
 			  
               <Field>
                 <div className="flex items-center">

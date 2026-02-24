@@ -48,6 +48,10 @@ export default function ItemAddPage() {
     title: '',
     url: '',
 	content: '',
+    image: '',
+    video: '',
+    author: '',
+    publishTime: '',
 	fetchStatus: 0,
 	feedId: '',
 	//synced: false,
@@ -90,6 +94,10 @@ export default function ItemAddPage() {
 		    title: item.title,
 			url: item.url,
 			content: item.content,
+			image: item.image,
+			video: item.video,
+			author: item.author,
+			publishTime: item.publishTime,
 			feedId: parseInt(item.feedId),
 			fetchStatus: parseInt(item.fetchStatus),
 			synced: synced, 
@@ -148,7 +156,35 @@ export default function ItemAddPage() {
                   <FieldLabel htmlFor="content">内容</FieldLabel>
                 </div>
                 <Textarea id="content" name="content" className="max-h-96" value={item.content} onChange={handleChange}/>
-              </Field>	
+              </Field>
+
+              <Field>
+                <div className="flex items-center">
+                  <FieldLabel htmlFor="image">封面图像</FieldLabel>
+                </div>
+                <Input id="image" name="image" type="text"  value={item.image} onChange={handleChange} />
+              </Field>
+
+              <Field>
+                <div className="flex items-center">
+                  <FieldLabel htmlFor="video">视频</FieldLabel>
+                </div>
+                <Input id="video" name="video" type="text"  value={item.video} onChange={handleChange} />
+              </Field>
+
+              <Field>
+                <div className="flex items-center">
+                  <FieldLabel htmlFor="author">作者</FieldLabel>
+                </div>
+                <Input id="author" name="author" type="text"  value={item.author} onChange={handleChange} />
+              </Field>
+
+              <Field>
+                <div className="flex items-center">
+                  <FieldLabel htmlFor="publishTime">发布日期</FieldLabel>
+                </div>
+                <Input id="publishTime" name="publishTime" type="text"  value={item.publishTime} onChange={handleChange} />
+              </Field>
 			  
               <Field>
                 <div className="flex items-center">
