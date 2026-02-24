@@ -1,10 +1,11 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "./generated/prisma-ts"
+  importFileExtension  = "js" 
 }
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -52,6 +53,10 @@ model Item {
   title       String
   url         String   @db.VarChar(1024)
   content     String   @db.LongText
+  image       String?   @db.VarChar(255)
+  video       String?   @db.VarChar(255)
+  author      String?   @db.VarChar(255)
+  publishTime String?   @db.VarChar(64)
   interval    Int      @default(1440000)
   nextTime    DateTime @default(now())
   //抓取状态,0,未抓取;1，抓取成功;2，抓取失败；  
@@ -60,6 +65,8 @@ model Item {
   synced      Boolean  @default(false)
   //是否经过处理，比如AI、人工加工处理、清理
   processed      Boolean  @default(false)
+  //视频下载状态,-1无需下载, 0,待下载，1下载成功，2下载失败
+  downloadStatus Int  @default(-1)
   data        Json
   feed        Feed?    @relation(fields: [feedId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   feedId      Int?
