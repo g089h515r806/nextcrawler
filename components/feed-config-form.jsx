@@ -97,6 +97,13 @@ const data = {
 	{key: "waitFor", label: "waitFor",},
 	{key: "waitForTimeout", label: "waitForTimeout",},
 	{key: "wheel", label: "wheel",},
+  ],
+
+  downloadCommandOptions: [
+    {key: "none", label: "None",},
+    {key: "yt-dlp", label: "yt-dlp",},
+	{key: "videodl", label: "videodl",},
+
   ],  
 }
 
@@ -132,6 +139,7 @@ const FeedConfigForm = forwardRef((props, ref) => {
 			  downloadContentImg:downloadContentImg,
 			  fields:fieldsTmpInItem,
 			},
+		    videoDownload:videoDownload,
 		    commentParser:{
 			  scrapeComment:scrapeComment,
 			  scrapeComment2:scrapeComment2,
@@ -159,6 +167,12 @@ const FeedConfigForm = forwardRef((props, ref) => {
 	initial: '',
 	increment: '',
 	num: '',
+  });
+  
+  const [videoDownload, setVideoDownload] = useState({
+    command: 'none',
+    options: '',
+	maxTime: '15000',
   });
   
   const [fields, setFields] = useState([
@@ -226,7 +240,15 @@ const FeedConfigForm = forwardRef((props, ref) => {
     setPagination(newPagination);
   };  
 
- 
+  const handleVideoDownloadChange = (value, propName) => {
+	  
+	let newVideoDownload = {
+      ...videoDownload,
+      [propName]: value
+    };
+	//console.log("newItem", newItem);
+    setVideoDownload(newVideoDownload);
+  };  
   
   const handleFieldsChange = (index, e) => {
   //handleFieldsChange(index, e){
@@ -561,6 +583,8 @@ const FeedConfigForm = forwardRef((props, ref) => {
 	
 	setPagination(feedConfig?.pagination || {type:"none", selector:""});
 	
+    setVideoDownload(feedConfig?.videoDownload || {command:"none", options:"", maxTime:"15000"});
+	
 	//let field
 	let fieldsTmp = feedConfig?.feedParser?.fields || [];
 	
@@ -659,6 +683,7 @@ const FeedConfigForm = forwardRef((props, ref) => {
           <TabsTrigger value="feed">种子采集配置</TabsTrigger>
           <TabsTrigger value="page">分页采集配置</TabsTrigger>
 		  <TabsTrigger value="item">详情采集配置</TabsTrigger>
+		  <TabsTrigger value="video">视频采集配置</TabsTrigger>
 		  <TabsTrigger value="comment">评论采集配置</TabsTrigger>
         </TabsList>
         <TabsContent value="feed">
@@ -955,6 +980,51 @@ const FeedConfigForm = forwardRef((props, ref) => {
 		    </CardContent>
 		  </Card>			
 	    </TabsContent>	
+		
+        <TabsContent value="video">	
+          <Card>
+            <CardContent className="grid gap-6">	
+			  <Field>
+				<div className="flex items-center">
+				  <FieldLabel htmlFor="video-download-command">视频下载命令</FieldLabel>
+				</div>
+							
+				<Select id="video-download-command" name="video-download-command" value={videoDownload.command} onValueChange={ (value) => handleVideoDownloadChange(value, "command")}>
+				  <SelectTrigger className="w-[180px]">
+					<SelectValue placeholder="选择视频下载命令" />
+				  </SelectTrigger>
+				  <SelectContent>
+					<SelectGroup>
+                      {data.downloadCommandOptions.map((downloadCommandOption, index) => (	
+                          <SelectItem key={index} value={downloadCommandOption.key}>{downloadCommandOption.label}</SelectItem>
+                      ))}
+					</SelectGroup>
+				  </SelectContent>
+				</Select>
+				
+			  </Field>	
+
+			{ videoDownload.command !== "none" && (
+			 <FieldGroup>
+			  <Field>
+				<div className="flex items-center">
+				  <FieldLabel htmlFor="video-download-options">选项</FieldLabel>
+				</div>
+				<Input id="video-download-options" name="video-download-options" type="text"  value={videoDownload.options} onChange={(e) => handleVideoDownloadChange(e.target.value, "options")} />
+			  </Field>			  
+
+			  <Field>
+				<div className="flex items-center">
+				  <FieldLabel htmlFor="video-download-maxtime">最大时长(毫秒)</FieldLabel>
+				</div>
+				<Input id="video-download-maxtime" name="video-download-maxtime" type="text"  value={videoDownload.maxTime} onChange={(e) => handleVideoDownloadChange(e.target.value, "maxTime")} />
+			  </Field>
+			  
+			  </FieldGroup>
+			 )} 
+		    </CardContent>
+		  </Card>		
+	    </TabsContent>
 
 
  <TabsContent value="comment">
