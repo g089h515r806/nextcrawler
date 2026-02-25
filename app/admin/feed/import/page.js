@@ -2,7 +2,6 @@
 'use client'
 import React, { useState} from 'react';
 import  * as XLSX from 'xlsx';
-import prisma from '@/lib/prisma';
 import Link from 'next/link';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button"

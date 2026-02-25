@@ -7,7 +7,7 @@
     "dev": "node server.js",
     "generateClient": "npx prisma generate && tsc --project tsconfig.prisma.json",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js",
+    "start": "cross-env NODE_ENV=production node server.js",
     "lint": "eslint"
   },
   "dependencies": {
@@ -48,6 +48,7 @@
     "@tailwindcss/postcss": "^4",
     "@types/node": "25.0.2",
     "@types/react": "19.2.7",
+    "cross-env": "^10.1.0",
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
     "prisma": "^7.4.0",
