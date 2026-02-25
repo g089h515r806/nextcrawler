@@ -1,2 +1,6 @@
 examples目录下面，我们给出了常用站点的示例采集规则模板，目前包括：
 weibo.txt  微博以及评论的采集
+dangdang.txt  当当图书信息的采集
+douyin.txt  抖音用户视频的采集
+youtube_short.txt  youtube用户短视频的采集
+youtube.txt  youtube用户视频的采集

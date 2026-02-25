@@ -1,0 +1,59 @@
+{
+    "label": "抖音用户",
+    "code": "douyin_user",
+    "config": {
+        "feedParser": {
+            "fields": [],
+            "selector": "ul[data-e2e=\"scroll-list\"] > li  a"
+        },
+        "itemParser": {
+            "fields": [
+                {
+                    "name": "publishTime",
+                    "selector": "span[data-e2e=\"detail-video-publish-time\"]",
+                    "attribute": "",
+                    "transformer": "",
+                    "transformerArg": ""
+                }
+            ],
+            "disableScrapeItem": false,
+            "downloadContentImg": false,
+            "disableAutoScrapeContent": true
+        },
+        "pagination": {
+            "type": "none",
+            "selector": ""
+        },
+        "feedActions": [
+            {
+                "name": "waitForTimeout",
+                "phase": "afterGoto",
+                "config": {
+                    "timeout": "3000"
+                }
+            }
+        ],
+        "itemActions": [
+            {
+                "name": "waitForTimeout",
+                "phase": "afterGoto",
+                "config": {
+                    "timeout": "3000"
+                }
+            }
+        ],
+        "commentParser": {
+            "fields": [],
+            "fields2": [],
+            "scrapeComment": false,
+            "scrapeComment2": false,
+            "commentSelector": "",
+            "commentSelector2": ""
+        },
+        "videoDownload": {
+            "command": "videodl",
+            "maxTime": "15000",
+            "options": ""
+        }
+    }
+}

@@ -1,0 +1,110 @@
+{
+    "label": "当当图书",
+    "code": "dangdangbook",
+    "config": {
+        "feedParser": {
+            "fields": [],
+            "selector": ".shoplist ul li p.name a"
+        },
+        "itemParser": {
+            "fields": [
+                {
+                    "name": "author",
+                    "selector": "//div[@class=\"messbox_info\"]/span[@dd_name=\"作者\"]",
+                    "attribute": "",
+                    "transformer": "",
+                    "transformerArg": ""
+                },
+                {
+                    "name": "publisher",
+                    "selector": "//div[@class=\"messbox_info\"]/span[@dd_name=\"出版社\"]",
+                    "attribute": "",
+                    "transformer": "",
+                    "transformerArg": ""
+                },
+                {
+                    "name": "publish_time",
+                    "selector": "//div[@class=\"messbox_info\"]/span[contains(text(), '出版时间')]",
+                    "attribute": "",
+                    "transformer": "",
+                    "transformerArg": ""
+                },
+                {
+                    "name": "price",
+                    "selector": "#original-price",
+                    "attribute": "",
+                    "transformer": "",
+                    "transformerArg": ""
+                },
+                {
+                    "name": "content",
+                    "selector": "#content .descrip",
+                    "attribute": "",
+                    "transformer": "",
+                    "transformerArg": ""
+                },
+                {
+                    "name": "authorIntroduction",
+                    "selector": "#authorIntroduction .descrip",
+                    "attribute": "",
+                    "transformer": "",
+                    "transformerArg": ""
+                },
+                {
+                    "name": "img",
+                    "selector": "#detailPicDiv img",
+                    "attribute": "src",
+                    "transformer": "absoluteUrl",
+                    "transformerArg": ""
+                },
+                {
+                    "name": "imgLocal",
+                    "selector": "#detailPicDiv img",
+                    "attribute": "src",
+                    "transformer": "download",
+                    "transformerArg": ""
+                },
+                {
+                    "name": "isbn",
+                    "selector": "//div[@id=\"detail_describe\"]/ul/li[contains(text(), \"国际标准书号ISBN\")]",
+                    "attribute": "",
+                    "transformer": "replaceToEmpty",
+                    "transformerArg": "国际标准书号ISBN："
+                }
+            ],
+            "disableScrapeItem": false,
+            "downloadContentImg": false,
+            "disableAutoScrapeContent": true
+        },
+        "pagination": {
+            "type": "selector",
+            "selector": ".paging ul li a"
+        },
+        "feedActions": [
+            {
+                "name": "waitForTimeout",
+                "phase": "afterGoto",
+                "config": {
+                    "timeout": "1000"
+                }
+            }
+        ],
+        "itemActions": [
+            {
+                "name": "waitForTimeout",
+                "phase": "afterGoto",
+                "config": {
+                    "timeout": "2000"
+                }
+            }
+        ],
+        "commentParser": {
+            "fields": [],
+            "fields2": [],
+            "scrapeComment": false,
+            "scrapeComment2": false,
+            "commentSelector": "",
+            "commentSelector2": ""
+        }
+    }
+}

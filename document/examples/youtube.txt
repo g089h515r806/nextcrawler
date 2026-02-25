@@ -1,0 +1,59 @@
+{
+    "label": "youtube",
+    "code": "youtube",
+    "config": {
+        "feedParser": {
+            "fields": [],
+            "selector": "#contents h3 > a"
+        },
+        "itemParser": {
+            "fields": [
+                {
+                    "name": "content",
+                    "selector": "#description-inline-expander",
+                    "attribute": "textContent",
+                    "transformer": "",
+                    "transformerArg": ""
+                }
+            ],
+            "disableScrapeItem": false,
+            "downloadContentImg": false,
+            "disableAutoScrapeContent": true
+        },
+        "pagination": {
+            "type": "none",
+            "selector": ""
+        },
+        "feedActions": [
+            {
+                "name": "waitForTimeout",
+                "phase": "afterGoto",
+                "config": {
+                    "timeout": "2000"
+                }
+            }
+        ],
+        "itemActions": [
+            {
+                "name": "waitForTimeout",
+                "phase": "afterGoto",
+                "config": {
+                    "timeout": "2000"
+                }
+            }
+        ],
+        "commentParser": {
+            "fields": [],
+            "fields2": [],
+            "scrapeComment": false,
+            "scrapeComment2": false,
+            "commentSelector": "",
+            "commentSelector2": ""
+        },
+        "videoDownload": {
+            "command": "yt-dlp",
+            "maxTime": "20000",
+            "options": ""
+        }
+    }
+}
