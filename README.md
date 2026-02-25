@@ -54,6 +54,17 @@
 
 ![管理界面](https://raw.githubusercontent.com/g089h515r806/nextcrawler/0d91acc4bb6a7fd552557199ddb901e74a41dc24/public/file/images/demo.jpg)
 
+### 采集下载视频
+> 普通MP4视频是可以直接使用fetch保存到本地。对于专门视频网站的视频下载，我们内置支持了两个视频下载工具:
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp)
+- [videodl](https://github.com/CharlesPikachu/videodl)
+> 前者支持大部分国际主流视频网站，后者对于中文视频网站提供了良好的支持。根据需要可有选择的安装它们，确保对应命令可用。
+- 安装python
+- pip install -U "yt-dlp[default]"
+- pip install videofetch
+- 安装ffmpeg 并确保全局可用
+> 具体可以参考两个工具的官方文档。如果你不需要下载视频，则无需安装.
+
 ## 视频教程
 > 作者录制了相关的视频教程，放在了抖音上
 - [Next Crawler 简介](https://www.douyin.com/video/7578491830568832302)
