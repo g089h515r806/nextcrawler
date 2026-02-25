@@ -131,7 +131,7 @@ export default async function FeedItemsPage({ params, searchParams,}) {
        <TableBody>
          {items.map((row) => (
            <TableRow key={row.id}>
-             <TableCell>{row.id}</TableCell>
+             <TableCell> <Link href={ '/admin/item/' + row.id} target="_blank">{row.id}</Link></TableCell>
              <TableCell className="w-128 whitespace-break-spaces break-all">
 			 	<div>{row.title}</div>
 				<div>{row.url}</div>
