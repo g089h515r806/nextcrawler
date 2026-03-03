@@ -1,24 +1,29 @@
 //import Image from "next/image";
-'use client'
-import React, { useState, useEffect,forwardRef, useImperativeHandle, } from 'react';
-import { Button } from "@/components/ui/button"
+'use client';
+import React, {
+  useState,
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+} from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from '@/components/ui/card';
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Label } from "@/components/ui/label"
+} from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -26,9 +31,16 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from '@/components/ui/select';
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 
 import {
   Dialog,
@@ -39,14 +51,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from '@/components/ui/dialog';
 
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import {
   WaitForConfigForm,
@@ -54,1215 +61,1505 @@ import {
   GotoConfigForm,
   FillConfigForm,
   WheelConfigForm,
-  LoopClickConfigForm,  
+  LoopClickConfigForm,
   DefaultConfigForm,
-} from "@/components/action-config-forms"
-
+} from '@/components/action-config-forms';
 
 //export default function FeedConfigForm(config) {
-	
+
 // This is options data for select option.
 const data = {
-
   transformerOptions: [
-    //{key: "none", label: "None",}, 
-	{key: "absoluteUrl", label: "absoluteUrl",},
-	{key: "download", label: "download",},
-    {key: "downloadInnerImg", label: "downloadInnerImg",},	
-	{key: "prefix", label: "prefix",},
-	{key: "replaceToEmpty", label: "replaceToEmpty",},
-	{key: "suffix", label: "suffix",},
-	{key: "substr", label: "substr",},
-    {key: "trim", label: "trim",},
+    //{key: "none", label: "None",},
+    { key: 'absoluteUrl', label: 'absoluteUrl' },
+    { key: 'download', label: 'download' },
+    { key: 'downloadInnerImg', label: 'downloadInnerImg' },
+    { key: 'prefix', label: 'prefix' },
+    { key: 'replaceToEmpty', label: 'replaceToEmpty' },
+    { key: 'suffix', label: 'suffix' },
+    { key: 'substr', label: 'substr' },
+    { key: 'trim', label: 'trim' },
   ],
-  
+
   phaseOptions: [
     //{key: "none", label: "None",},
-    {key: "beforeGoto", label: "beforeGoto",},
-	{key: "afterGoto", label: "afterGoto",},
-	{key: "afterParse", label: "afterParse",},
+    { key: 'beforeGoto', label: 'beforeGoto' },
+    { key: 'afterGoto', label: 'afterGoto' },
+    { key: 'afterParse', label: 'afterParse' },
   ],
-  
+
   actionOptions: [
     //{key: "none", label: "None",},
-    {key: "check", label: "check",},
-	{key: "clear", label: "clear",},
-	{key: "click", label: "click",},
-	{key: "dblclick", label: "dblclick",},
-	{key: "fill", label: "fill",},
-    {key: "goto", label: "goto",},
-	{key: "loopClick", label: "loopClick",},
-	{key: "selectOption", label: "selectOption",},
-	{key: "uncheck", label: "uncheck",},	
-	{key: "waitFor", label: "waitFor",},
-	{key: "waitForTimeout", label: "waitForTimeout",},
-	{key: "wheel", label: "wheel",},
+    { key: 'check', label: 'check' },
+    { key: 'clear', label: 'clear' },
+    { key: 'click', label: 'click' },
+    { key: 'dblclick', label: 'dblclick' },
+    { key: 'fill', label: 'fill' },
+    { key: 'goto', label: 'goto' },
+    { key: 'loopClick', label: 'loopClick' },
+    { key: 'selectOption', label: 'selectOption' },
+    { key: 'uncheck', label: 'uncheck' },
+    { key: 'waitFor', label: 'waitFor' },
+    { key: 'waitForTimeout', label: 'waitForTimeout' },
+    { key: 'wheel', label: 'wheel' },
   ],
 
   downloadCommandOptions: [
-    {key: "none", label: "None",},
-    {key: "yt-dlp", label: "yt-dlp",},
-	{key: "videodl", label: "videodl",},
-
-  ],  
-}
-
+    { key: 'none', label: 'None' },
+    { key: 'yt-dlp', label: 'yt-dlp' },
+    { key: 'videodl', label: 'videodl' },
+  ],
+};
 
 const FeedConfigForm = forwardRef((props, ref) => {
-	
   useImperativeHandle(ref, () => ({
     getValue: () => {
-		//console.log("useImperativeHandle getValue");
-		//过滤name 为空的字段，
-		let fieldsTmp = [...fields];
-		fieldsTmp = fieldsTmp.filter((ele, idx) => ele.name !=  "");
-		
-		
-		let fieldsTmpInItem = [...fieldsInItem];
-		fieldsTmpInItem = fieldsTmpInItem.filter((ele, idx) => ele.name !=  "");
+      //console.log("useImperativeHandle getValue");
+      //过滤name 为空的字段，
+      let fieldsTmp = [...fields];
+      fieldsTmp = fieldsTmp.filter((ele, idx) => ele.name != '');
 
-		let fieldsTmpInComment = [...fieldsInComment];
-		fieldsTmpInComment = fieldsTmpInComment.filter((ele, idx) => ele.name !=  "");		
+      let fieldsTmpInItem = [...fieldsInItem];
+      fieldsTmpInItem = fieldsTmpInItem.filter((ele, idx) => ele.name != '');
 
-		let fieldsTmpInComment2 = [...fieldsInComment2];
-		fieldsTmpInComment2 = fieldsTmpInComment2.filter((ele, idx) => ele.name !=  "");
-		
-		let configTmp = {
-		    feedParser:{
-			  selector:selector,
-			  fields:fieldsTmp,
-			},
-		    pagination:pagination,
-		    itemParser:{
-			  disableScrapeItem:disableScrapeItem,
-			  disableAutoScrapeContent:disableAutoScrapeContent,
-			  downloadContentImg:downloadContentImg,
-			  fields:fieldsTmpInItem,
-			},
-		    videoDownload:videoDownload,
-		    commentParser:{
-			  scrapeComment:scrapeComment,
-			  scrapeComment2:scrapeComment2,
-			  commentSelector:commentSelector,
-			  commentSelector2:commentSelector2,
-			  fields:fieldsTmpInComment,
-			  fields2:fieldsTmpInComment2,
-			},			
-            feedActions	:feedActions,
-			itemActions	:itemActions,			
-		};
-        return configTmp;		
-	},
+      let fieldsTmpInComment = [...fieldsInComment];
+      fieldsTmpInComment = fieldsTmpInComment.filter(
+        (ele, idx) => ele.name != ''
+      );
+
+      let fieldsTmpInComment2 = [...fieldsInComment2];
+      fieldsTmpInComment2 = fieldsTmpInComment2.filter(
+        (ele, idx) => ele.name != ''
+      );
+
+      let configTmp = {
+        feedParser: {
+          selector: selector,
+          fields: fieldsTmp,
+        },
+        pagination: pagination,
+        itemParser: {
+          disableScrapeItem: disableScrapeItem,
+          disableAutoScrapeContent: disableAutoScrapeContent,
+          downloadContentImg: downloadContentImg,
+          fields: fieldsTmpInItem,
+        },
+        videoDownload: videoDownload,
+        commentParser: {
+          scrapeComment: scrapeComment,
+          scrapeComment2: scrapeComment2,
+          commentSelector: commentSelector,
+          commentSelector2: commentSelector2,
+          fields: fieldsTmpInComment,
+          fields2: fieldsTmpInComment2,
+        },
+        feedActions: feedActions,
+        itemActions: itemActions,
+      };
+      return configTmp;
+    },
     clear: () => {
       //inputRef.current.value = '';
     },
-  }));	
-  
-  const [selector, setSelector] = React.useState("");
-  
+  }));
+
+  const [selector, setSelector] = React.useState('');
+
   const [pagination, setPagination] = useState({
     type: 'none',
     selector: '',
-	pattern: '',
-	initial: '',
-	increment: '',
-	num: '',
+    pattern: '',
+    initial: '',
+    increment: '',
+    num: '',
   });
-  
+
   const [videoDownload, setVideoDownload] = useState({
     command: 'none',
     options: '',
-	maxTime: '15000',
+    maxTime: '15000',
   });
-  
-  const [fields, setFields] = useState([
-  ]); 
-  
-  const [fieldsInItem, setFieldsInItem] = useState([
 
-  ]); 
-  
-  const [fieldsInComment, setFieldsInComment] = useState([
+  const [fields, setFields] = useState([]);
 
-  ]); 
+  const [fieldsInItem, setFieldsInItem] = useState([]);
 
-  const [fieldsInComment2, setFieldsInComment2] = useState([
+  const [fieldsInComment, setFieldsInComment] = useState([]);
 
-  ]);  
-  
-  
-  const [feedActions, setFeedActions] = useState([]); 
-  
-  const [itemActions, setItemActions] = useState([]);  
-  
+  const [fieldsInComment2, setFieldsInComment2] = useState([]);
+
+  const [feedActions, setFeedActions] = useState([]);
+
+  const [itemActions, setItemActions] = useState([]);
+
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [currentAction, setCurrentAction] = React.useState({});
-  
-  const [currentActionType, setCurrentActionType] = React.useState("");
-  const [currentActionIndex, setCurrentActionIndex] = React.useState(-1); 
 
-  const [disableScrapeItem, setDisableScrapeItem] = React.useState(false); 
-  const [disableAutoScrapeContent, setDisableAutoScrapeContent] = React.useState(false); 
-  const [downloadContentImg, setDownloadContentImg] = React.useState(false);  
-  
- 
+  const [currentActionType, setCurrentActionType] = React.useState('');
+  const [currentActionIndex, setCurrentActionIndex] = React.useState(-1);
+
+  const [disableScrapeItem, setDisableScrapeItem] = React.useState(false);
+  const [disableAutoScrapeContent, setDisableAutoScrapeContent] =
+    React.useState(false);
+  const [downloadContentImg, setDownloadContentImg] = React.useState(false);
+
   const [scrapeComment, setScrapeComment] = React.useState(false);
   const [scrapeComment2, setScrapeComment2] = React.useState(false);
-  
-  const [commentSelector, setCommentSelector] = React.useState("");
-  const [commentSelector2, setCommentSelector2] = React.useState("");
- 
-  //const [feedActionDialogOpen, setFeedActionDialogOpen] = React.useState(false);
-  
-  //const [itemActionDialogOpen, setItemActionDialogOpen] = React.useState(false);
-  
-  //const [currentFeedAction, setCurrentFeedAction] = React.useState({}); 
 
-  //const [currentItemAction, setCurrentItemAction] = React.useState({});  
+  const [commentSelector, setCommentSelector] = React.useState('');
+  const [commentSelector2, setCommentSelector2] = React.useState('');
+
+  //const [feedActionDialogOpen, setFeedActionDialogOpen] = React.useState(false);
+
+  //const [itemActionDialogOpen, setItemActionDialogOpen] = React.useState(false);
+
+  //const [currentFeedAction, setCurrentFeedAction] = React.useState({});
+
+  //const [currentItemAction, setCurrentItemAction] = React.useState({});
 
   const handlePaginationChange = (value, propName) => {
-	  
-	//  console.log("e", e);
+    //  console.log("e", e);
     //const { name, value } = e.target;
-	
-	
-	//let prefix = "pagination-"
-	//const str = "Hello, World!";
+
+    //let prefix = "pagination-"
+    //const str = "Hello, World!";
     //const propName = name.substring(prefix.length);
-	
-	//console.log("propName", propName);
-	//console.log("value", value);
-	let newPagination = {
+
+    //console.log("propName", propName);
+    //console.log("value", value);
+    let newPagination = {
       ...pagination,
-      [propName]: value
+      [propName]: value,
     };
-	//console.log("newItem", newItem);
+    //console.log("newItem", newItem);
     setPagination(newPagination);
-  };  
+  };
 
   const handleVideoDownloadChange = (value, propName) => {
-	  
-	let newVideoDownload = {
+    let newVideoDownload = {
       ...videoDownload,
-      [propName]: value
+      [propName]: value,
     };
-	//console.log("newItem", newItem);
+    //console.log("newItem", newItem);
     setVideoDownload(newVideoDownload);
-  };  
-  
+  };
+
   const handleFieldsChange = (index, e) => {
-  //handleFieldsChange(index, e){
-     //let data = this.state.parserFields || [];
-	// console.log("handleFieldsChange", e); 
-	let newFields = [...fields]; 
+    //handleFieldsChange(index, e){
+    //let data = this.state.parserFields || [];
+    // console.log("handleFieldsChange", e);
+    let newFields = [...fields];
     newFields[index][e.target.name] = e.target.value;
-    setFields(newFields); 
-  } 
+    setFields(newFields);
+  };
 
   const handleFeedTransformerChange = (index, value) => {
-	//console.log("index",index)
-	//console.log("value",value)
-	let newFields = [...fields]; 
-    newFields[index]["transformer"] = value;
-    setFields(newFields); 
-  }  
-  
-  const addEmptyField = (e) => {
-    e.preventDefault();  
-
-	//console.log("addFields", e);    
-	
-    let newfield = { name: '', selector: '', attribute: '', transformer:'', transformerArg:'', }
-	
-	setFields([...fields, newfield]);
-
-
-  }
-  
-  const removeFields = (index, e) => {
-    e.preventDefault();    
-
-	// console.log("removeFields", index); 
+    //console.log("index",index)
+    //console.log("value",value)
     let newFields = [...fields];
-    newFields.splice(index, 1)
+    newFields[index]['transformer'] = value;
+    setFields(newFields);
+  };
 
-    setFields(newFields);	 
+  const addEmptyField = (e) => {
+    e.preventDefault();
 
-  } 
+    //console.log("addFields", e);
 
+    let newfield = {
+      name: '',
+      selector: '',
+      attribute: '',
+      transformer: '',
+      transformerArg: '',
+    };
 
-  
+    setFields([...fields, newfield]);
+  };
+
+  const removeFields = (index, e) => {
+    e.preventDefault();
+
+    // console.log("removeFields", index);
+    let newFields = [...fields];
+    newFields.splice(index, 1);
+
+    setFields(newFields);
+  };
+
   const handleFieldsChangeInItem = (index, e) => {
-  //handleFieldsChange(index, e){
-     //let data = this.state.parserFields || [];
-	 //console.log("handleFieldsChange", e); 
-	let newFieldsInItem = [...fieldsInItem]; 
+    //handleFieldsChange(index, e){
+    //let data = this.state.parserFields || [];
+    //console.log("handleFieldsChange", e);
+    let newFieldsInItem = [...fieldsInItem];
     newFieldsInItem[index][e.target.name] = e.target.value;
-    setFieldsInItem(newFieldsInItem); 
-  } 
+    setFieldsInItem(newFieldsInItem);
+  };
 
   const handleItemTransformerChange = (index, value) => {
-	let newFieldsInItem = [...fieldsInItem]; 
-    newFieldsInItem[index]["transformer"] = value;
-    setFieldsInItem(newFieldsInItem);
-  } 
-  
-  
-  const addEmptyFieldInItem = (e) => {
-    e.preventDefault();  
-
-	//console.log("addFields", e);    
-	
-    let newfield = { name: '', selector: '', attribute: '', transformer:'', transformerArg:'', }
-	
-	setFieldsInItem([...fieldsInItem, newfield]);
-
-
-  }
-  
-  const removeFieldsInItem = (index, e) => {
-    e.preventDefault();    
-
-	// console.log("removeFields", index); 
     let newFieldsInItem = [...fieldsInItem];
-    newFieldsInItem.splice(index, 1)
+    newFieldsInItem[index]['transformer'] = value;
+    setFieldsInItem(newFieldsInItem);
+  };
 
-    setFieldsInItem(newFieldsInItem);	 
+  const addEmptyFieldInItem = (e) => {
+    e.preventDefault();
 
-  }  
-  
-  
-  
+    //console.log("addFields", e);
+
+    let newfield = {
+      name: '',
+      selector: '',
+      attribute: '',
+      transformer: '',
+      transformerArg: '',
+    };
+
+    setFieldsInItem([...fieldsInItem, newfield]);
+  };
+
+  const removeFieldsInItem = (index, e) => {
+    e.preventDefault();
+
+    // console.log("removeFields", index);
+    let newFieldsInItem = [...fieldsInItem];
+    newFieldsInItem.splice(index, 1);
+
+    setFieldsInItem(newFieldsInItem);
+  };
+
   const handleFieldsChangeInComment = (index, e) => {
-  //handleFieldsChange(index, e){
-     //let data = this.state.parserFields || [];
-	 //console.log("handleFieldsChange", e); 
-	let newFieldsInComment = [...fieldsInComment]; 
+    //handleFieldsChange(index, e){
+    //let data = this.state.parserFields || [];
+    //console.log("handleFieldsChange", e);
+    let newFieldsInComment = [...fieldsInComment];
     newFieldsInComment[index][e.target.name] = e.target.value;
-    setFieldsInComment(newFieldsInComment); 
-  } 
+    setFieldsInComment(newFieldsInComment);
+  };
 
   const handleCommentTransformerChange = (index, value) => {
-	let newFieldsInComment = [...fieldsInComment]; 
-    newFieldsInComment[index]["transformer"] = value;
+    let newFieldsInComment = [...fieldsInComment];
+    newFieldsInComment[index]['transformer'] = value;
     setFieldsInComment(newFieldsInComment);
-  } 
-  
-  
+  };
+
   const addEmptyFieldInComment = (e) => {
-    e.preventDefault();  
+    e.preventDefault();
 
-	//console.log("addFields", e);    
-	
-    let newfield = { name: '', selector: '', attribute: '', transformer:'', transformerArg:'', }
-	
-	setFieldsInComment([...fieldsInComment, newfield]);
+    //console.log("addFields", e);
 
+    let newfield = {
+      name: '',
+      selector: '',
+      attribute: '',
+      transformer: '',
+      transformerArg: '',
+    };
 
-  }
-  
+    setFieldsInComment([...fieldsInComment, newfield]);
+  };
+
   const removeFieldsInComment = (index, e) => {
-    e.preventDefault();    
+    e.preventDefault();
 
-	// console.log("removeFields", index); 
+    // console.log("removeFields", index);
     let newFieldsInComment = [...fieldsInComment2];
-    newFieldsInComment.splice(index, 1)
+    newFieldsInComment.splice(index, 1);
 
-    setFieldsInComment(newFieldsInComment);	 
-
-  }   
-  
+    setFieldsInComment(newFieldsInComment);
+  };
 
   const handleFieldsChangeInComment2 = (index, e) => {
-  //handleFieldsChange(index, e){
-     //let data = this.state.parserFields || [];
-	 //console.log("handleFieldsChange", e); 
-	let newFieldsInComment2 = [...fieldsInComment2]; 
+    //handleFieldsChange(index, e){
+    //let data = this.state.parserFields || [];
+    //console.log("handleFieldsChange", e);
+    let newFieldsInComment2 = [...fieldsInComment2];
     newFieldsInComment2[index][e.target.name] = e.target.value;
-    setFieldsInComment2(newFieldsInComment2); 
-  } 
+    setFieldsInComment2(newFieldsInComment2);
+  };
 
   const handleComment2TransformerChange = (index, value) => {
-	let newFieldsInComment2 = [...fieldsInComment2]; 
-    newFieldsInComment2[index]["transformer"] = value;
-    setFieldsInComment2(newFieldsInComment2);
-  } 
-  
-  
-  const addEmptyFieldInComment2 = (e) => {
-    e.preventDefault();  
-
-	//console.log("addFields", e);    
-	
-    let newfield = { name: '', selector: '', attribute: '', transformer:'', transformerArg:'', }
-	
-	setFieldsInComment2([...fieldsInComment2, newfield]);
-
-
-  }
-  
-  const removeFieldsInComment2 = (index, e) => {
-    e.preventDefault();    
-
-	// console.log("removeFields", index); 
     let newFieldsInComment2 = [...fieldsInComment2];
-    newFieldsInComment2.splice(index, 1)
+    newFieldsInComment2[index]['transformer'] = value;
+    setFieldsInComment2(newFieldsInComment2);
+  };
 
-    setFieldsInComment2(newFieldsInComment2);	 
+  const addEmptyFieldInComment2 = (e) => {
+    e.preventDefault();
 
-  } 
+    //console.log("addFields", e);
 
+    let newfield = {
+      name: '',
+      selector: '',
+      attribute: '',
+      transformer: '',
+      transformerArg: '',
+    };
 
+    setFieldsInComment2([...fieldsInComment2, newfield]);
+  };
+
+  const removeFieldsInComment2 = (index, e) => {
+    e.preventDefault();
+
+    // console.log("removeFields", index);
+    let newFieldsInComment2 = [...fieldsInComment2];
+    newFieldsInComment2.splice(index, 1);
+
+    setFieldsInComment2(newFieldsInComment2);
+  };
 
   const addAction = (type, e) => {
-    e.preventDefault();  
+    e.preventDefault();
 
-	console.log("addConfigAction", e); 
+    console.log('addConfigAction', e);
 
     setDialogOpen(true);
     setCurrentActionType(type);
-	setCurrentActionIndex(-1);
-	setCurrentAction({});	
-  }
-  
+    setCurrentActionIndex(-1);
+    setCurrentAction({});
+  };
+
   const removeAction = (index, type, e) => {
-	 e.preventDefault();   
-	 //console.log("removeConfigAction", index); 
-	 
-	 if(type == "feed"){
-		let newFeedActions = [...feedActions];
-		newFeedActions.splice(index, 1)
+    e.preventDefault();
+    //console.log("removeConfigAction", index);
 
-		setFeedActions(newFeedActions);			 
-	 }else if(type == "item"){
-		let newItemActions = [...itemActions];
-		newItemActions.splice(index, 1)
+    if (type == 'feed') {
+      let newFeedActions = [...feedActions];
+      newFeedActions.splice(index, 1);
 
-		setItemActions(newItemActions);		 
-	 }
-  }    
-  
+      setFeedActions(newFeedActions);
+    } else if (type == 'item') {
+      let newItemActions = [...itemActions];
+      newItemActions.splice(index, 1);
+
+      setItemActions(newItemActions);
+    }
+  };
+
   const editAction = (index, type, e) => {
-	 e.preventDefault();   
-	 //console.log("editConfigAction", index);
-    if(type == 'feed'){
-		let actionTmp = feedActions[index];
-		
-		setCurrentAction({...actionTmp});
-        setCurrentActionType(type);
-        setCurrentActionIndex(index);
-        setDialogOpen(true);		
-		
-	}else if(type == 'item'){
-		let actionTmp = itemActions[index];
-		
-		setCurrentAction({...actionTmp});
-        setCurrentActionType(type);
-        setCurrentActionIndex(index);
-        setDialogOpen(true);		
-	}		
-  }
+    e.preventDefault();
+    //console.log("editConfigAction", index);
+    if (type == 'feed') {
+      let actionTmp = feedActions[index];
+
+      setCurrentAction({ ...actionTmp });
+      setCurrentActionType(type);
+      setCurrentActionIndex(index);
+      setDialogOpen(true);
+    } else if (type == 'item') {
+      let actionTmp = itemActions[index];
+
+      setCurrentAction({ ...actionTmp });
+      setCurrentActionType(type);
+      setCurrentActionIndex(index);
+      setDialogOpen(true);
+    }
+  };
 
   const saveAction = (e) => {
-	 e.preventDefault();   
-	 //console.log("saveAction", e);
-	 if(currentActionType == 'feed'){
-		 
-		let newFeedActions = [...feedActions];
-		//newFeedActions.splice(index, 1)
-		if(currentActionIndex >= 0){
-			newFeedActions[currentActionIndex] = currentAction;
-		}else{
-			newFeedActions.push(currentAction);
-		}
-		setFeedActions(newFeedActions);	
-        
-		//reset currentAction related state
-        setCurrentActionType('');
-        setCurrentActionIndex(-1);
-        setCurrentAction({});
-        setDialogOpen(false);		
-		//currentActionIndex
-		 
-	 }else if(currentActionType == 'item'){
-		let newItemActions = [...itemActions];
-		//newFeedActions.splice(index, 1)
-		if(currentActionIndex >= 0){
-			newItemActions[currentActionIndex] = currentAction;
-		}else{
-			newItemActions.push(currentAction);
-		}
-		setItemActions(newItemActions);	
+    e.preventDefault();
+    //console.log("saveAction", e);
+    if (currentActionType == 'feed') {
+      let newFeedActions = [...feedActions];
+      //newFeedActions.splice(index, 1)
+      if (currentActionIndex >= 0) {
+        newFeedActions[currentActionIndex] = currentAction;
+      } else {
+        newFeedActions.push(currentAction);
+      }
+      setFeedActions(newFeedActions);
 
-        setCurrentActionType('');
-        setCurrentActionIndex(-1);
-        setCurrentAction({});
-        setDialogOpen(false);
-		
-	 }
-	 
-  }
-  
+      //reset currentAction related state
+      setCurrentActionType('');
+      setCurrentActionIndex(-1);
+      setCurrentAction({});
+      setDialogOpen(false);
+      //currentActionIndex
+    } else if (currentActionType == 'item') {
+      let newItemActions = [...itemActions];
+      //newFeedActions.splice(index, 1)
+      if (currentActionIndex >= 0) {
+        newItemActions[currentActionIndex] = currentAction;
+      } else {
+        newItemActions.push(currentAction);
+      }
+      setItemActions(newItemActions);
+
+      setCurrentActionType('');
+      setCurrentActionIndex(-1);
+      setCurrentAction({});
+      setDialogOpen(false);
+    }
+  };
+
   const cancelAction = (e) => {
-    e.preventDefault();  
+    e.preventDefault();
 
-	//console.log("cancelAction", e); 
+    //console.log("cancelAction", e);
 
     setDialogOpen(false);
     setCurrentActionType('');
-	setCurrentActionIndex(-1);
-	setCurrentAction({});	
-  }
-    
-  
+    setCurrentActionIndex(-1);
+    setCurrentAction({});
+  };
+
   const handleActionNameChange = (value) => {
-	let newCurrentAction = {
+    let newCurrentAction = {
       ...currentAction,
-      name: value
+      name: value,
     };
-	//console.log("newItem", newItem);
+    //console.log("newItem", newItem);
     setCurrentAction(newCurrentAction);
   };
 
   const handleActionPhaseChange = (value) => {
-	let newCurrentAction = {
+    let newCurrentAction = {
       ...currentAction,
-      phase: value
+      phase: value,
     };
-	//console.log("newItem", newItem);
+    //console.log("newItem", newItem);
     setCurrentAction(newCurrentAction);
-  }; 
-  
-
-  
-
+  };
 
   const actionConfigForm = (action) => {
-	let name = action.name || "";
-	  if (name == "goto") {
-		return <GotoConfigForm defaultConfig={action.config || {url:"",}} onConfigChange={handleActionConfigChange}/>;
-	  }else if(name == "fill"){
-		return <FillConfigForm defaultConfig={action.config || {selector:"", value:"",}} onConfigChange={handleActionConfigChange}/>;  
-	  }else if(name == "waitForTimeout"){
-		return <WaitForTimeoutConfigForm defaultConfig={action.config || {timeout:"",}} onConfigChange={handleActionConfigChange}/>;    
-	  }else if(name == "waitFor"){
-		return <WaitForConfigForm defaultConfig={action.config || {selector:"", timeout:"",}} onConfigChange={handleActionConfigChange}/>;    
-	  }else if(name == "selectOption"){
-		return <SelectOptionConfigForm defaultConfig={action.config || {selector:"", value:"",}} onConfigChange={handleActionConfigChange}/>;    
-	  }else if(name == "wheel"){
-		return <WheelConfigForm defaultConfig={action.config || {deltaX:"", deltaY:"",}} onConfigChange={handleActionConfigChange}/>;    
-	  }else if(name == "loopClick"){
-		return <LoopClickConfigForm defaultConfig={action.config || {selector:"", waitTime:"",}} onConfigChange={handleActionConfigChange}/>;    
-	  }else{
-		return <DefaultConfigForm defaultConfig={action.config || {selector:"",}} onConfigChange={handleActionConfigChange}/>;    
-	  }
-	  
-	  
-	  //return <li className="item">{name}</li>;
-  } 
+    let name = action.name || '';
+    if (name == 'goto') {
+      return (
+        <GotoConfigForm
+          defaultConfig={action.config || { url: '' }}
+          onConfigChange={handleActionConfigChange}
+        />
+      );
+    } else if (name == 'fill') {
+      return (
+        <FillConfigForm
+          defaultConfig={action.config || { selector: '', value: '' }}
+          onConfigChange={handleActionConfigChange}
+        />
+      );
+    } else if (name == 'waitForTimeout') {
+      return (
+        <WaitForTimeoutConfigForm
+          defaultConfig={action.config || { timeout: '' }}
+          onConfigChange={handleActionConfigChange}
+        />
+      );
+    } else if (name == 'waitFor') {
+      return (
+        <WaitForConfigForm
+          defaultConfig={action.config || { selector: '', timeout: '' }}
+          onConfigChange={handleActionConfigChange}
+        />
+      );
+    } else if (name == 'selectOption') {
+      return (
+        <SelectOptionConfigForm
+          defaultConfig={action.config || { selector: '', value: '' }}
+          onConfigChange={handleActionConfigChange}
+        />
+      );
+    } else if (name == 'wheel') {
+      return (
+        <WheelConfigForm
+          defaultConfig={action.config || { deltaX: '', deltaY: '' }}
+          onConfigChange={handleActionConfigChange}
+        />
+      );
+    } else if (name == 'loopClick') {
+      return (
+        <LoopClickConfigForm
+          defaultConfig={action.config || { selector: '', waitTime: '' }}
+          onConfigChange={handleActionConfigChange}
+        />
+      );
+    } else {
+      return (
+        <DefaultConfigForm
+          defaultConfig={action.config || { selector: '' }}
+          onConfigChange={handleActionConfigChange}
+        />
+      );
+    }
+
+    //return <li className="item">{name}</li>;
+  };
 
   const handleActionConfigChange = (newConfig) => {
     //setChildCount(newCount); // 更新父组件中的状态
-	let newCurrentAction = {
+    let newCurrentAction = {
       ...currentAction,
-      config: newConfig
+      config: newConfig,
     };
-	//console.log("newConfig", newConfig);
-    setCurrentAction(newCurrentAction);	
+    //console.log("newConfig", newConfig);
+    setCurrentAction(newCurrentAction);
     //console.log("Child count updated:", newCount);
-  };   
-  
+  };
 
- useEffect(() => {
-	//console.log("props", props); 
-	let feedConfig = props.feedConfig || {}
-	//console.log("feedConfig", feedConfig); 
-	
-	 
-	setSelector(feedConfig?.feedParser?.selector || "");
-	
-	setPagination(feedConfig?.pagination || {type:"none", selector:""});
-	
-    setVideoDownload(feedConfig?.videoDownload || {command:"none", options:"", maxTime:"15000"});
-	
-	//let field
-	let fieldsTmp = feedConfig?.feedParser?.fields || [];
-	
-	//console.log("fieldsTmp", fieldsTmp);
-	
-	
-	if(fieldsTmp.length > 0){
-		//setFields([...fieldsTmp]);
-		setFields(fieldsTmp);
-	}else{
-		setFields([{   
-		  name: '',
-		  selector: '',
-		  attribute:'',
-		  transformer:'',
-		  transformerArg:'',	  
-		}]);
-	}
-	
-	let fieldsTmpInItem = feedConfig?.itemParser?.fields || [];
-	if(fieldsTmpInItem.length > 0){
-		setFieldsInItem(fieldsTmpInItem);
-	}else{
-		setFieldsInItem([{   
-		  name: '',
-		  selector: '',
-		  attribute:'',
-		  transformer:'',
-		  transformerArg:'',	  
-		}]);
-	}
-	
-	let fieldsTmpInComment = feedConfig?.commentParser?.fields || [];
-	if(fieldsTmpInComment.length > 0){
-		setFieldsInComment(fieldsTmpInComment);
-	}else{
-		setFieldsInComment([{   
-		  name: '',
-		  selector: '',
-		  attribute:'',
-		  transformer:'',
-		  transformerArg:'',	  
-		}]);
-	}
+  useEffect(() => {
+    //console.log("props", props);
+    let feedConfig = props.feedConfig || {};
+    //console.log("feedConfig", feedConfig);
 
-	let fieldsTmpInComment2 = feedConfig?.commentParser?.fields2 || [];
-	if(fieldsTmpInComment2.length > 0){
-		setFieldsInComment2(fieldsTmpInComment2);
-	}else{
-		setFieldsInComment2([{   
-		  name: '',
-		  selector: '',
-		  attribute:'',
-		  transformer:'',
-		  transformerArg:'',	  
-		}]);
-	}
-	
-	let feedActionsTmp = feedConfig?.feedActions || [];
-	if(feedActionsTmp.length > 0){
-		setFeedActions(feedActionsTmp);
-	}
-	let itemActionsTmp = feedConfig?.itemActions || [];
-	if(itemActionsTmp.length > 0){
-		setItemActions(itemActionsTmp);
-	}	
-	
-	
-	let disableScrapeItemTmp = feedConfig?.itemParser?.disableScrapeItem || false;
+    setSelector(feedConfig?.feedParser?.selector || '');
+
+    setPagination(feedConfig?.pagination || { type: 'none', selector: '' });
+
+    setVideoDownload(
+      feedConfig?.videoDownload || {
+        command: 'none',
+        options: '',
+        maxTime: '15000',
+      }
+    );
+
+    //let field
+    let fieldsTmp = feedConfig?.feedParser?.fields || [];
+
+    //console.log("fieldsTmp", fieldsTmp);
+
+    if (fieldsTmp.length > 0) {
+      //setFields([...fieldsTmp]);
+      setFields(fieldsTmp);
+    } else {
+      setFields([
+        {
+          name: '',
+          selector: '',
+          attribute: '',
+          transformer: '',
+          transformerArg: '',
+        },
+      ]);
+    }
+
+    let fieldsTmpInItem = feedConfig?.itemParser?.fields || [];
+    if (fieldsTmpInItem.length > 0) {
+      setFieldsInItem(fieldsTmpInItem);
+    } else {
+      setFieldsInItem([
+        {
+          name: '',
+          selector: '',
+          attribute: '',
+          transformer: '',
+          transformerArg: '',
+        },
+      ]);
+    }
+
+    let fieldsTmpInComment = feedConfig?.commentParser?.fields || [];
+    if (fieldsTmpInComment.length > 0) {
+      setFieldsInComment(fieldsTmpInComment);
+    } else {
+      setFieldsInComment([
+        {
+          name: '',
+          selector: '',
+          attribute: '',
+          transformer: '',
+          transformerArg: '',
+        },
+      ]);
+    }
+
+    let fieldsTmpInComment2 = feedConfig?.commentParser?.fields2 || [];
+    if (fieldsTmpInComment2.length > 0) {
+      setFieldsInComment2(fieldsTmpInComment2);
+    } else {
+      setFieldsInComment2([
+        {
+          name: '',
+          selector: '',
+          attribute: '',
+          transformer: '',
+          transformerArg: '',
+        },
+      ]);
+    }
+
+    let feedActionsTmp = feedConfig?.feedActions || [];
+    if (feedActionsTmp.length > 0) {
+      setFeedActions(feedActionsTmp);
+    }
+    let itemActionsTmp = feedConfig?.itemActions || [];
+    if (itemActionsTmp.length > 0) {
+      setItemActions(itemActionsTmp);
+    }
+
+    let disableScrapeItemTmp =
+      feedConfig?.itemParser?.disableScrapeItem || false;
     setDisableScrapeItem(disableScrapeItemTmp);
-	let disableAutoScrapeContentTmp = feedConfig?.itemParser?.disableAutoScrapeContent || false;
+    let disableAutoScrapeContentTmp =
+      feedConfig?.itemParser?.disableAutoScrapeContent || false;
     setDisableAutoScrapeContent(disableAutoScrapeContentTmp);
-	let downloadContentImgTmp = feedConfig?.itemParser?.downloadContentImg || false;
+    let downloadContentImgTmp =
+      feedConfig?.itemParser?.downloadContentImg || false;
     setDownloadContentImg(downloadContentImgTmp);
-	
-	let scrapeCommentTmp = feedConfig?.commentParser?.scrapeComment || false;
-    setScrapeComment(scrapeCommentTmp);	
-	
-	let scrapeComment2Tmp = feedConfig?.commentParser?.scrapeComment2 || false;
-    setScrapeComment2(scrapeComment2Tmp);	
-	
-	let commentSelectorTmp = feedConfig?.commentParser?.commentSelector || "";
-    setCommentSelector(commentSelectorTmp);	
-	
-	let commentSelector2Tmp = feedConfig?.commentParser?.commentSelector2 || "";
-    setCommentSelector2(commentSelector2Tmp);	
-	
-	
+
+    let scrapeCommentTmp = feedConfig?.commentParser?.scrapeComment || false;
+    setScrapeComment(scrapeCommentTmp);
+
+    let scrapeComment2Tmp = feedConfig?.commentParser?.scrapeComment2 || false;
+    setScrapeComment2(scrapeComment2Tmp);
+
+    let commentSelectorTmp = feedConfig?.commentParser?.commentSelector || '';
+    setCommentSelector(commentSelectorTmp);
+
+    let commentSelector2Tmp = feedConfig?.commentParser?.commentSelector2 || '';
+    setCommentSelector2(commentSelector2Tmp);
   }, []);
 
   return (
-      <div className="">
-	  
+    <div className="">
       <Tabs defaultValue="feed">
         <TabsList>
           <TabsTrigger value="feed">种子采集配置</TabsTrigger>
           <TabsTrigger value="page">分页采集配置</TabsTrigger>
-		  <TabsTrigger value="item">详情采集配置</TabsTrigger>
-		  <TabsTrigger value="video">视频采集配置</TabsTrigger>
-		  <TabsTrigger value="comment">评论采集配置</TabsTrigger>
+          <TabsTrigger value="item">详情采集配置</TabsTrigger>
+          <TabsTrigger value="video">视频采集配置</TabsTrigger>
+          <TabsTrigger value="comment">评论采集配置</TabsTrigger>
         </TabsList>
         <TabsContent value="feed">
           <Card>
-            <CardContent className="grid gap-6">		  
-			  <Field>
-				<div className="flex items-center">
-				  <FieldLabel htmlFor="selector">上下文选择器</FieldLabel>
-				</div>
-				<Input id="selector" name="selector" type="text"  value={selector} onChange={(e) => setSelector(e.target.value)} required />
-			  </Field>
-			  
-			  <Table>
-				<TableHeader>
-				  <TableRow>
-					<TableHead>字段名</TableHead>
-					<TableHead>选择器</TableHead>
-					<TableHead>属性名</TableHead>
-					<TableHead>转换器</TableHead>
-					<TableHead>转换参数</TableHead>
-					<TableHead>删除</TableHead>
-				 </TableRow>
-				</TableHeader>
-				<TableBody>
-				 {fields.map((field, index) => (
-				   <TableRow key={index}>
-					 <TableCell>
-						<Input name="name" type="text"  value={field.name} onChange={(e) => handleFieldsChange(index, e)} />
-					 </TableCell>
-					 <TableCell>
-						<Input name="selector" type="text"  value={field.selector} onChange={(e) => handleFieldsChange(index, e)} />
-					 </TableCell>
-					 <TableCell>
-						 <Input name="attribute" type="text"  value={field.attribute} onChange={(e) => handleFieldsChange(index, e)} />
-					 </TableCell>
-					 <TableCell>
-						<Select name="transformer" value={ field.transformer} onValueChange={ (value) => handleFeedTransformerChange(index, value)}>
-						  <SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="选择转换器" />
-						  </SelectTrigger>
-						  <SelectContent>
-							<SelectGroup>
-							  <SelectItem value={null}>None</SelectItem>
-							 {data.transformerOptions.map((transformerOption, index) => (
-							
-							  <SelectItem key={index} value={transformerOption.key}>{transformerOption.label}</SelectItem>
-							  ))
-							 }
-							 
-							</SelectGroup>
-						  </SelectContent>
-						</Select>
-					 </TableCell>
-					 <TableCell>
-						 <Input name="transformerArg" type="text"  value={field.transformerArg} onChange={(e) => handleFieldsChange(index, e)} />
-					 </TableCell>			 
-					 <TableCell>
-					   <Button onClick={(e) => removeFields(index, e)}>删除</Button>
-					 </TableCell>
+            <CardContent className="grid gap-6">
+              <Field>
+                <div className="flex items-center">
+                  <FieldLabel htmlFor="selector">上下文选择器</FieldLabel>
+                </div>
+                <Input
+                  id="selector"
+                  name="selector"
+                  type="text"
+                  value={selector}
+                  onChange={(e) => setSelector(e.target.value)}
+                  required
+                />
+              </Field>
 
-				   </TableRow>
-				 ))}
-			   </TableBody>
-			 </Table>		  
-				
-			 <Button className="w-32" onClick={(e) => addEmptyField(e)}>添加字段映射</Button>	
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>字段名</TableHead>
+                    <TableHead>选择器</TableHead>
+                    <TableHead>属性名</TableHead>
+                    <TableHead>转换器</TableHead>
+                    <TableHead>转换参数</TableHead>
+                    <TableHead>删除</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {fields.map((field, index) => (
+                    <TableRow key={index}>
+                      <TableCell>
+                        <Input
+                          name="name"
+                          type="text"
+                          value={field.name}
+                          onChange={(e) => handleFieldsChange(index, e)}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          name="selector"
+                          type="text"
+                          value={field.selector}
+                          onChange={(e) => handleFieldsChange(index, e)}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          name="attribute"
+                          type="text"
+                          value={field.attribute}
+                          onChange={(e) => handleFieldsChange(index, e)}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Select
+                          name="transformer"
+                          value={field.transformer}
+                          onValueChange={(value) =>
+                            handleFeedTransformerChange(index, value)
+                          }
+                        >
+                          <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="选择转换器" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectItem value={null}>None</SelectItem>
+                              {data.transformerOptions.map(
+                                (transformerOption, index) => (
+                                  <SelectItem
+                                    key={index}
+                                    value={transformerOption.key}
+                                  >
+                                    {transformerOption.label}
+                                  </SelectItem>
+                                )
+                              )}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          name="transformerArg"
+                          type="text"
+                          value={field.transformerArg}
+                          onChange={(e) => handleFieldsChange(index, e)}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Button onClick={(e) => removeFields(index, e)}>
+                          删除
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
 
+              <Button className="w-32" onClick={(e) => addEmptyField(e)}>
+                添加字段映射
+              </Button>
 
-			 <Table>
-			   <TableHeader>
-				 <TableRow>
-				 
-				   <TableHead>阶段</TableHead>
-				   <TableHead>动作</TableHead>
-				   <TableHead>配置</TableHead>
-				   <TableHead>编辑</TableHead>
-				   <TableHead>删除</TableHead>
-				 </TableRow>
-			   </TableHeader>
-			   <TableBody>
-				 {feedActions.map((action, index) => (
-				   <TableRow key={index}>
-					 <TableCell>
-					 {action.phase}
-					 </TableCell>
-					 <TableCell>
-					  {action.name}
-					 </TableCell>			 
-					 
-					 <TableCell>
-					  {JSON.stringify(action.config)}
-					 </TableCell>
-					 <TableCell>
-						<Button onClick={(e) => editAction(index, 'feed', e)}>编辑</Button>
-					 </TableCell>
-					 <TableCell>
-					   <Button onClick={(e) => removeAction(index, 'feed', e)}>删除</Button>
-					 </TableCell>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>阶段</TableHead>
+                    <TableHead>动作</TableHead>
+                    <TableHead>配置</TableHead>
+                    <TableHead>编辑</TableHead>
+                    <TableHead>删除</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {feedActions.map((action, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{action.phase}</TableCell>
+                      <TableCell>{action.name}</TableCell>
 
-				   </TableRow>
-				 ))}
-			   </TableBody>
-			 </Table>		  
-				
-			 <Button className="w-32" onClick={(e) => addAction('feed', e)}>添加动作</Button>		 
-		    </CardContent>
-		  </Card>
-	    </TabsContent>
-        <TabsContent value="page">	
+                      <TableCell>{JSON.stringify(action.config)}</TableCell>
+                      <TableCell>
+                        <Button onClick={(e) => editAction(index, 'feed', e)}>
+                          编辑
+                        </Button>
+                      </TableCell>
+                      <TableCell>
+                        <Button onClick={(e) => removeAction(index, 'feed', e)}>
+                          删除
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+
+              <Button className="w-32" onClick={(e) => addAction('feed', e)}>
+                添加动作
+              </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="page">
           <Card>
-            <CardContent className="grid gap-6">	
-			  <Field>
-				<div className="flex items-center">
-				  <FieldLabel htmlFor="pagination-type">分页类型</FieldLabel>
-				</div>
-							
-				<Select id="pagination-type" name="pagination-type" value={pagination.type} onValueChange={ (value) => handlePaginationChange(value, "type")}>
-				  <SelectTrigger className="w-[180px]">
-					<SelectValue placeholder="选择分页类型" />
-				  </SelectTrigger>
-				  <SelectContent>
-					<SelectGroup>
-					  <SelectItem value="none">无分页</SelectItem>
-					  <SelectItem value="selector">选择器</SelectItem>
-					  <SelectItem value="pattern">模式</SelectItem>
-					</SelectGroup>
-				  </SelectContent>
-				</Select>
-				
-			  </Field>	
-            { pagination.type == "selector" && (
-			  <Field>
-				<div className="flex items-center">
-				  <FieldLabel htmlFor="pagination-selector">分页选择器</FieldLabel>
-				</div>
-				<Input id="pagination-selector" name="pagination-selector" type="text"  value={pagination.selector} onChange={(e) => handlePaginationChange(e.target.value, "selector")} />
-			  </Field>
-			)}
+            <CardContent className="grid gap-6">
+              <Field>
+                <div className="flex items-center">
+                  <FieldLabel htmlFor="pagination-type">分页类型</FieldLabel>
+                </div>
 
-			{ pagination.type == "pattern" && (
-			 <FieldGroup>
-			  <Field>
-				<div className="flex items-center">
-				  <FieldLabel htmlFor="pagination-pattern">模式</FieldLabel>
-				</div>
-				<Input id="pagination-pattern" name="pagination-pattern" type="text"  value={pagination.pattern} onChange={(e) => handlePaginationChange(e.target.value, "pattern")} />
-			  </Field>			  
+                <Select
+                  id="pagination-type"
+                  name="pagination-type"
+                  value={pagination.type}
+                  onValueChange={(value) =>
+                    handlePaginationChange(value, 'type')
+                  }
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="选择分页类型" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="none">无分页</SelectItem>
+                      <SelectItem value="selector">选择器</SelectItem>
+                      <SelectItem value="pattern">模式</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </Field>
+              {pagination.type == 'selector' && (
+                <Field>
+                  <div className="flex items-center">
+                    <FieldLabel htmlFor="pagination-selector">
+                      分页选择器
+                    </FieldLabel>
+                  </div>
+                  <Input
+                    id="pagination-selector"
+                    name="pagination-selector"
+                    type="text"
+                    value={pagination.selector}
+                    onChange={(e) =>
+                      handlePaginationChange(e.target.value, 'selector')
+                    }
+                  />
+                </Field>
+              )}
 
-			  <Field>
-				<div className="flex items-center">
-				  <FieldLabel htmlFor="pagination-initial">初始</FieldLabel>
-				</div>
-				<Input id="pagination-initial" name="pagination-initial" type="text"  value={pagination.initial} onChange={(e) => handlePaginationChange(e.target.value, "initial")} />
-			  </Field>
-			  
+              {pagination.type == 'pattern' && (
+                <FieldGroup>
+                  <Field>
+                    <div className="flex items-center">
+                      <FieldLabel htmlFor="pagination-pattern">模式</FieldLabel>
+                    </div>
+                    <Input
+                      id="pagination-pattern"
+                      name="pagination-pattern"
+                      type="text"
+                      value={pagination.pattern}
+                      onChange={(e) =>
+                        handlePaginationChange(e.target.value, 'pattern')
+                      }
+                    />
+                  </Field>
 
-			  <Field>
-				<div className="flex items-center">
-				  <FieldLabel htmlFor="pagination-increment">增量</FieldLabel>
-				</div>
-				<Input id="pagination-increment" name="pagination-increment" type="text"  value={pagination.increment} onChange={(e) => handlePaginationChange(e.target.value, "increment")} />
-			  </Field>
+                  <Field>
+                    <div className="flex items-center">
+                      <FieldLabel htmlFor="pagination-initial">初始</FieldLabel>
+                    </div>
+                    <Input
+                      id="pagination-initial"
+                      name="pagination-initial"
+                      type="text"
+                      value={pagination.initial}
+                      onChange={(e) =>
+                        handlePaginationChange(e.target.value, 'initial')
+                      }
+                    />
+                  </Field>
 
-			  <Field>
-				<div className="flex items-center">
-				  <FieldLabel htmlFor="pagination-num">总数</FieldLabel>
-				</div>
-				<Input id="pagination-num" name="pagination-num" type="text"  value={pagination.num} onChange={(e) => handlePaginationChange(e.target.value, "num")} />
-			  </Field>			  
-			  </FieldGroup>
-			 )} 
-		    </CardContent>
-		  </Card>		
-	    </TabsContent>
+                  <Field>
+                    <div className="flex items-center">
+                      <FieldLabel htmlFor="pagination-increment">
+                        增量
+                      </FieldLabel>
+                    </div>
+                    <Input
+                      id="pagination-increment"
+                      name="pagination-increment"
+                      type="text"
+                      value={pagination.increment}
+                      onChange={(e) =>
+                        handlePaginationChange(e.target.value, 'increment')
+                      }
+                    />
+                  </Field>
+
+                  <Field>
+                    <div className="flex items-center">
+                      <FieldLabel htmlFor="pagination-num">总数</FieldLabel>
+                    </div>
+                    <Input
+                      id="pagination-num"
+                      name="pagination-num"
+                      type="text"
+                      value={pagination.num}
+                      onChange={(e) =>
+                        handlePaginationChange(e.target.value, 'num')
+                      }
+                    />
+                  </Field>
+                </FieldGroup>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
         <TabsContent value="item">
           <Card>
             <CardContent className="grid gap-6">
-			
-			<div className="flex items-start gap-3">
-				<Checkbox id="disableScrapeItem" name="disableScrapeItem" checked={disableScrapeItem} onCheckedChange={setDisableScrapeItem} />
-				<div className="grid gap-2">
-				  <Label htmlFor="disableScrapeItem">禁止抓取详情</Label>
-				</div>
-			</div>
-			<div className="flex items-start gap-3">
-				<Checkbox id="disableAutoScrapeContent" name="disableAutoScrapeContent" checked={disableAutoScrapeContent} onCheckedChange={setDisableAutoScrapeContent} />
-				<div className="grid gap-2">
-				  <Label htmlFor="disableAutoScrapeContent">禁止自动提取正文</Label>
-				</div>
-			</div>
-			<div className="flex items-start gap-3">
-				<Checkbox id="downloadContentImg" name="downloadContentImg" checked={downloadContentImg} onCheckedChange={setDownloadContentImg} />
-				<div className="grid gap-2">
-				  <Label htmlFor="downloadContentImg">自动下载正文图片</Label>
-				</div>
-			</div>			
-		 <Table>
-		   <TableHeader>
-			 <TableRow>
-			   <TableHead>字段名</TableHead>
-			   <TableHead>选择器</TableHead>
-			   <TableHead>属性名</TableHead>
-			   <TableHead>转换器</TableHead>
-			   <TableHead>转换参数</TableHead>		   
-			   <TableHead>删除</TableHead>
-			 </TableRow>
-		   </TableHeader>
-		   <TableBody>
-			 {fieldsInItem.map((field, index) => (
-			   <TableRow key={index}>
-				 <TableCell>
-					<Input name="name" type="text"  value={field.name} onChange={(e) => handleFieldsChangeInItem(index, e)} />
-				 </TableCell>
-				 <TableCell>
-					<Input name="selector" type="text"  value={field.selector} onChange={(e) => handleFieldsChangeInItem(index, e)} />
-				 </TableCell>
-				 <TableCell>
-					 <Input name="attribute" type="text"  value={field.attribute} onChange={(e) => handleFieldsChangeInItem(index, e)} />
-				 </TableCell>
-				 <TableCell>
-				 
-					<Select name="transformer" value={ field.transformer} onValueChange={ (value) => handleItemTransformerChange(index, value)}>
-					  <SelectTrigger className="w-[180px]">
-						<SelectValue placeholder="选择转换器" />
-					  </SelectTrigger>
-					  <SelectContent>
-						<SelectGroup>
-						
-						  <SelectItem value={null}>None</SelectItem>
-						 {data.transformerOptions.map((transformerOption, index) => (
-						
-						  <SelectItem key={index} value={transformerOption.key}>{transformerOption.label}</SelectItem>
-						  ))
-						 }						
+              <div className="flex items-start gap-3">
+                <Checkbox
+                  id="disableScrapeItem"
+                  name="disableScrapeItem"
+                  checked={disableScrapeItem}
+                  onCheckedChange={setDisableScrapeItem}
+                />
+                <div className="grid gap-2">
+                  <Label htmlFor="disableScrapeItem">禁止抓取详情</Label>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Checkbox
+                  id="disableAutoScrapeContent"
+                  name="disableAutoScrapeContent"
+                  checked={disableAutoScrapeContent}
+                  onCheckedChange={setDisableAutoScrapeContent}
+                />
+                <div className="grid gap-2">
+                  <Label htmlFor="disableAutoScrapeContent">
+                    禁止自动提取正文
+                  </Label>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Checkbox
+                  id="downloadContentImg"
+                  name="downloadContentImg"
+                  checked={downloadContentImg}
+                  onCheckedChange={setDownloadContentImg}
+                />
+                <div className="grid gap-2">
+                  <Label htmlFor="downloadContentImg">自动下载正文图片</Label>
+                </div>
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>字段名</TableHead>
+                    <TableHead>选择器</TableHead>
+                    <TableHead>属性名</TableHead>
+                    <TableHead>转换器</TableHead>
+                    <TableHead>转换参数</TableHead>
+                    <TableHead>删除</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {fieldsInItem.map((field, index) => (
+                    <TableRow key={index}>
+                      <TableCell>
+                        <Input
+                          name="name"
+                          type="text"
+                          value={field.name}
+                          onChange={(e) => handleFieldsChangeInItem(index, e)}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          name="selector"
+                          type="text"
+                          value={field.selector}
+                          onChange={(e) => handleFieldsChangeInItem(index, e)}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          name="attribute"
+                          type="text"
+                          value={field.attribute}
+                          onChange={(e) => handleFieldsChangeInItem(index, e)}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Select
+                          name="transformer"
+                          value={field.transformer}
+                          onValueChange={(value) =>
+                            handleItemTransformerChange(index, value)
+                          }
+                        >
+                          <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="选择转换器" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectItem value={null}>None</SelectItem>
+                              {data.transformerOptions.map(
+                                (transformerOption, index) => (
+                                  <SelectItem
+                                    key={index}
+                                    value={transformerOption.key}
+                                  >
+                                    {transformerOption.label}
+                                  </SelectItem>
+                                )
+                              )}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          name="transformerArg"
+                          type="text"
+                          value={field.transformerArg}
+                          onChange={(e) => handleFieldsChangeInItem(index, e)}
+                        />
+                      </TableCell>
 
-						</SelectGroup>
-					  </SelectContent>
-					</Select>				 
-					
-				 </TableCell>
-				 <TableCell>
-					 <Input name="transformerArg" type="text"  value={field.transformerArg} onChange={(e) => handleFieldsChangeInItem(index, e)} />
-				 </TableCell>			 
-				 
-				 <TableCell>
-				   <Button onClick={(e) => removeFieldsInItem(index, e)}>删除</Button>
-				 </TableCell>
+                      <TableCell>
+                        <Button onClick={(e) => removeFieldsInItem(index, e)}>
+                          删除
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
 
-			   </TableRow>
-			 ))}
-		   </TableBody>
-		 </Table>		  
-			
-		 <Button className="w-32" onClick={(e) => addEmptyFieldInItem(e)}>添加字段映射</Button>
-		 
-		 
-		 <Table>
-		   <TableHeader>
-			 <TableRow>
-			   <TableHead>阶段</TableHead>
-			   <TableHead>动作</TableHead>	   
-			   <TableHead>配置</TableHead>
-			   <TableHead>编辑</TableHead>
-			   <TableHead>删除</TableHead>
-			 </TableRow>
-		   </TableHeader>
-		   <TableBody>
-			 {itemActions.map((action, index) => (
-			   <TableRow key={index}>
-				 <TableCell>
-				{action.phase}
-				 </TableCell>
-				 <TableCell>
-				 {action.name}
-				 </TableCell>			 
-				 
-				 <TableCell>
-				  {JSON.stringify(action.config)}
-				 </TableCell>
-				 <TableCell>
-					<Button onClick={(e) => editAction(index, 'item', e)}>编辑</Button>
-				 </TableCell>
-				 <TableCell>
-				   <Button onClick={(e) => removeAction(index, 'item', e)}>删除</Button>
-				 </TableCell>
+              <Button className="w-32" onClick={(e) => addEmptyFieldInItem(e)}>
+                添加字段映射
+              </Button>
 
-			   </TableRow>
-			 ))}
-		   </TableBody>
-		 </Table>		  
-			
-		 <Button className="w-32" onClick={(e) => addAction('item', e)}>添加动作</Button>			 
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>阶段</TableHead>
+                    <TableHead>动作</TableHead>
+                    <TableHead>配置</TableHead>
+                    <TableHead>编辑</TableHead>
+                    <TableHead>删除</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {itemActions.map((action, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{action.phase}</TableCell>
+                      <TableCell>{action.name}</TableCell>
 
-		    </CardContent>
-		  </Card>			
-	    </TabsContent>	
-		
-        <TabsContent value="video">	
-          <Card>
-            <CardContent className="grid gap-6">	
-			  <Field>
-				<div className="flex items-center">
-				  <FieldLabel htmlFor="video-download-command">视频下载命令</FieldLabel>
-				</div>
-							
-				<Select id="video-download-command" name="video-download-command" value={videoDownload.command} onValueChange={ (value) => handleVideoDownloadChange(value, "command")}>
-				  <SelectTrigger className="w-[180px]">
-					<SelectValue placeholder="选择视频下载命令" />
-				  </SelectTrigger>
-				  <SelectContent>
-					<SelectGroup>
-                      {data.downloadCommandOptions.map((downloadCommandOption, index) => (	
-                          <SelectItem key={index} value={downloadCommandOption.key}>{downloadCommandOption.label}</SelectItem>
-                      ))}
-					</SelectGroup>
-				  </SelectContent>
-				</Select>
-				
-			  </Field>	
+                      <TableCell>{JSON.stringify(action.config)}</TableCell>
+                      <TableCell>
+                        <Button onClick={(e) => editAction(index, 'item', e)}>
+                          编辑
+                        </Button>
+                      </TableCell>
+                      <TableCell>
+                        <Button onClick={(e) => removeAction(index, 'item', e)}>
+                          删除
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
 
-			{ videoDownload.command !== "none" && (
-			 <FieldGroup>
-			  <Field>
-				<div className="flex items-center">
-				  <FieldLabel htmlFor="video-download-options">选项</FieldLabel>
-				</div>
-				<Input id="video-download-options" name="video-download-options" type="text"  value={videoDownload.options} onChange={(e) => handleVideoDownloadChange(e.target.value, "options")} />
-			  </Field>			  
+              <Button className="w-32" onClick={(e) => addAction('item', e)}>
+                添加动作
+              </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-			  <Field>
-				<div className="flex items-center">
-				  <FieldLabel htmlFor="video-download-maxtime">最大时长(毫秒)</FieldLabel>
-				</div>
-				<Input id="video-download-maxtime" name="video-download-maxtime" type="text"  value={videoDownload.maxTime} onChange={(e) => handleVideoDownloadChange(e.target.value, "maxTime")} />
-			  </Field>
-			  
-			  </FieldGroup>
-			 )} 
-		    </CardContent>
-		  </Card>		
-	    </TabsContent>
-
-
- <TabsContent value="comment">
+        <TabsContent value="video">
           <Card>
             <CardContent className="grid gap-6">
-			
-			<div className="flex items-start gap-3">
-				<Checkbox id="scrapeComment" name="scrapeComment" checked={scrapeComment} onCheckedChange={setScrapeComment} />
-				<div className="grid gap-2">
-				  <Label htmlFor="scrapeComment">抓取评论</Label>
-				</div>
-			</div>
-			
+              <Field>
+                <div className="flex items-center">
+                  <FieldLabel htmlFor="video-download-command">
+                    视频下载命令
+                  </FieldLabel>
+                </div>
 
+                <Select
+                  id="video-download-command"
+                  name="video-download-command"
+                  value={videoDownload.command}
+                  onValueChange={(value) =>
+                    handleVideoDownloadChange(value, 'command')
+                  }
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="选择视频下载命令" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {data.downloadCommandOptions.map(
+                        (downloadCommandOption, index) => (
+                          <SelectItem
+                            key={index}
+                            value={downloadCommandOption.key}
+                          >
+                            {downloadCommandOption.label}
+                          </SelectItem>
+                        )
+                      )}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </Field>
 
-           	<Field>
-				<div className="flex items-center">
-				  <FieldLabel htmlFor="commentSelector">一级评论选择器</FieldLabel>
-				</div>
-				<Input id="commentSelector" name="commentSelector" type="text"  value={commentSelector} onChange={(e) => setCommentSelector(e.target.value)} />
-			  </Field>	
+              {videoDownload.command !== 'none' && (
+                <FieldGroup>
+                  <Field>
+                    <div className="flex items-center">
+                      <FieldLabel htmlFor="video-download-options">
+                        选项
+                      </FieldLabel>
+                    </div>
+                    <Input
+                      id="video-download-options"
+                      name="video-download-options"
+                      type="text"
+                      value={videoDownload.options}
+                      onChange={(e) =>
+                        handleVideoDownloadChange(e.target.value, 'options')
+                      }
+                    />
+                  </Field>
 
-		  
-			
-		 <Table>
-		   <TableHeader>
-			 <TableRow>
-			   <TableHead>字段名</TableHead>
-			   <TableHead>选择器</TableHead>
-			   <TableHead>属性名</TableHead>
-			   <TableHead>转换器</TableHead>
-			   <TableHead>转换参数</TableHead>		   
-			   <TableHead>删除</TableHead>
-			 </TableRow>
-		   </TableHeader>
-		   <TableBody>
-			 {fieldsInComment.map((field, index) => (
-			   <TableRow key={index}>
-				 <TableCell>
-					<Input name="name" type="text"  value={field.name} onChange={(e) => handleFieldsChangeInComment(index, e)} />
-				 </TableCell>
-				 <TableCell>
-					<Input name="selector" type="text"  value={field.selector} onChange={(e) => handleFieldsChangeInComment(index, e)} />
-				 </TableCell>
-				 <TableCell>
-					 <Input name="attribute" type="text"  value={field.attribute} onChange={(e) => handleFieldsChangeInComment(index, e)} />
-				 </TableCell>
-				 <TableCell>
-				 
-					<Select name="transformer" value={ field.transformer} onValueChange={ (value) => handleCommentTransformerChange(index, value)}>
-					  <SelectTrigger className="w-[180px]">
-						<SelectValue placeholder="选择转换器" />
-					  </SelectTrigger>
-					  <SelectContent>
-						<SelectGroup>
-						
-						  <SelectItem value={null}>None</SelectItem>
-						 {data.transformerOptions.map((transformerOption, index) => (
-						
-						  <SelectItem key={index} value={transformerOption.key}>{transformerOption.label}</SelectItem>
-						  ))
-						 }						
+                  <Field>
+                    <div className="flex items-center">
+                      <FieldLabel htmlFor="video-download-maxtime">
+                        最大时长(毫秒)
+                      </FieldLabel>
+                    </div>
+                    <Input
+                      id="video-download-maxtime"
+                      name="video-download-maxtime"
+                      type="text"
+                      value={videoDownload.maxTime}
+                      onChange={(e) =>
+                        handleVideoDownloadChange(e.target.value, 'maxTime')
+                      }
+                    />
+                  </Field>
+                </FieldGroup>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-						</SelectGroup>
-					  </SelectContent>
-					</Select>				 
-					
-				 </TableCell>
-				 <TableCell>
-					 <Input name="transformerArg" type="text"  value={field.transformerArg} onChange={(e) => handleFieldsChangeInComment(index, e)} />
-				 </TableCell>			 
-				 
-				 <TableCell>
-				   <Button onClick={(e) => removeFieldsInComment(index, e)}>删除</Button>
-				 </TableCell>
+        <TabsContent value="comment">
+          <Card>
+            <CardContent className="grid gap-6">
+              <div className="flex items-start gap-3">
+                <Checkbox
+                  id="scrapeComment"
+                  name="scrapeComment"
+                  checked={scrapeComment}
+                  onCheckedChange={setScrapeComment}
+                />
+                <div className="grid gap-2">
+                  <Label htmlFor="scrapeComment">抓取评论</Label>
+                </div>
+              </div>
 
-			   </TableRow>
-			 ))}
-		   </TableBody>
-		 </Table>		  
-			
-		 <Button className="w-48" onClick={(e) => addEmptyFieldInComment(e)}>添加一级评论字段映射</Button>
-		 
+              <Field>
+                <div className="flex items-center">
+                  <FieldLabel htmlFor="commentSelector">
+                    一级评论选择器
+                  </FieldLabel>
+                </div>
+                <Input
+                  id="commentSelector"
+                  name="commentSelector"
+                  type="text"
+                  value={commentSelector}
+                  onChange={(e) => setCommentSelector(e.target.value)}
+                />
+              </Field>
 
-			<div className="flex items-start gap-3">
-				<Checkbox id="scrapeComment2" name="scrapeComment2" checked={scrapeComment2} onCheckedChange={setScrapeComment2} />
-				<div className="grid gap-2">
-				  <Label htmlFor="scrapeComment2">抓取二级评论</Label>
-				</div>
-			</div>
-			
-           	<Field>
-				<div className="flex items-center">
-				  <FieldLabel htmlFor="commentSelector2">二级评论选择器</FieldLabel>
-				</div>
-				<Input id="commentSelector2" name="commentSelector2" type="text"  value={commentSelector2} onChange={(e) => setCommentSelector2(e.target.value)} />
-			  </Field>	
-			  
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>字段名</TableHead>
+                    <TableHead>选择器</TableHead>
+                    <TableHead>属性名</TableHead>
+                    <TableHead>转换器</TableHead>
+                    <TableHead>转换参数</TableHead>
+                    <TableHead>删除</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {fieldsInComment.map((field, index) => (
+                    <TableRow key={index}>
+                      <TableCell>
+                        <Input
+                          name="name"
+                          type="text"
+                          value={field.name}
+                          onChange={(e) =>
+                            handleFieldsChangeInComment(index, e)
+                          }
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          name="selector"
+                          type="text"
+                          value={field.selector}
+                          onChange={(e) =>
+                            handleFieldsChangeInComment(index, e)
+                          }
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          name="attribute"
+                          type="text"
+                          value={field.attribute}
+                          onChange={(e) =>
+                            handleFieldsChangeInComment(index, e)
+                          }
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Select
+                          name="transformer"
+                          value={field.transformer}
+                          onValueChange={(value) =>
+                            handleCommentTransformerChange(index, value)
+                          }
+                        >
+                          <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="选择转换器" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectItem value={null}>None</SelectItem>
+                              {data.transformerOptions.map(
+                                (transformerOption, index) => (
+                                  <SelectItem
+                                    key={index}
+                                    value={transformerOption.key}
+                                  >
+                                    {transformerOption.label}
+                                  </SelectItem>
+                                )
+                              )}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          name="transformerArg"
+                          type="text"
+                          value={field.transformerArg}
+                          onChange={(e) =>
+                            handleFieldsChangeInComment(index, e)
+                          }
+                        />
+                      </TableCell>
 
-		 <Table>
-		   <TableHeader>
-			 <TableRow>
-			   <TableHead>字段名</TableHead>
-			   <TableHead>选择器</TableHead>
-			   <TableHead>属性名</TableHead>
-			   <TableHead>转换器</TableHead>
-			   <TableHead>转换参数</TableHead>		   
-			   <TableHead>删除</TableHead>
-			 </TableRow>
-		   </TableHeader>
-		   <TableBody>
-			 {fieldsInComment2.map((field, index) => (
-			   <TableRow key={index}>
-				 <TableCell>
-					<Input name="name" type="text"  value={field.name} onChange={(e) => handleFieldsChangeInComment2(index, e)} />
-				 </TableCell>
-				 <TableCell>
-					<Input name="selector" type="text"  value={field.selector} onChange={(e) => handleFieldsChangeInComment2(index, e)} />
-				 </TableCell>
-				 <TableCell>
-					 <Input name="attribute" type="text"  value={field.attribute} onChange={(e) => handleFieldsChangeInComment2(index, e)} />
-				 </TableCell>
-				 <TableCell>
-				 
-					<Select name="transformer" value={ field.transformer} onValueChange={ (value) => handleComment2TransformerChange(index, value)}>
-					  <SelectTrigger className="w-[180px]">
-						<SelectValue placeholder="选择转换器" />
-					  </SelectTrigger>
-					  <SelectContent>
-						<SelectGroup>
-						
-						  <SelectItem value={null}>None</SelectItem>
-						 {data.transformerOptions.map((transformerOption, index) => (
-						
-						  <SelectItem key={index} value={transformerOption.key}>{transformerOption.label}</SelectItem>
-						  ))
-						 }						
+                      <TableCell>
+                        <Button
+                          onClick={(e) => removeFieldsInComment(index, e)}
+                        >
+                          删除
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
 
-						</SelectGroup>
-					  </SelectContent>
-					</Select>				 
-					
-				 </TableCell>
-				 <TableCell>
-					 <Input name="transformerArg" type="text"  value={field.transformerArg} onChange={(e) => handleFieldsChangeInComment2(index, e)} />
-				 </TableCell>			 
-				 
-				 <TableCell>
-				   <Button onClick={(e) => removeFieldsInComment2(index, e)}>删除</Button>
-				 </TableCell>
+              <Button
+                className="w-48"
+                onClick={(e) => addEmptyFieldInComment(e)}
+              >
+                添加一级评论字段映射
+              </Button>
 
-			   </TableRow>
-			 ))}
-		   </TableBody>
-		 </Table>		  
-			
-		 <Button className="w-48" onClick={(e) => addEmptyFieldInComment2(e)}>添加二级评论字段映射</Button>			 
+              <div className="flex items-start gap-3">
+                <Checkbox
+                  id="scrapeComment2"
+                  name="scrapeComment2"
+                  checked={scrapeComment2}
+                  onCheckedChange={setScrapeComment2}
+                />
+                <div className="grid gap-2">
+                  <Label htmlFor="scrapeComment2">抓取二级评论</Label>
+                </div>
+              </div>
 
-		    </CardContent>
-		  </Card>			
-	    </TabsContent>		
-		
+              <Field>
+                <div className="flex items-center">
+                  <FieldLabel htmlFor="commentSelector2">
+                    二级评论选择器
+                  </FieldLabel>
+                </div>
+                <Input
+                  id="commentSelector2"
+                  name="commentSelector2"
+                  type="text"
+                  value={commentSelector2}
+                  onChange={(e) => setCommentSelector2(e.target.value)}
+                />
+              </Field>
+
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>字段名</TableHead>
+                    <TableHead>选择器</TableHead>
+                    <TableHead>属性名</TableHead>
+                    <TableHead>转换器</TableHead>
+                    <TableHead>转换参数</TableHead>
+                    <TableHead>删除</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {fieldsInComment2.map((field, index) => (
+                    <TableRow key={index}>
+                      <TableCell>
+                        <Input
+                          name="name"
+                          type="text"
+                          value={field.name}
+                          onChange={(e) =>
+                            handleFieldsChangeInComment2(index, e)
+                          }
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          name="selector"
+                          type="text"
+                          value={field.selector}
+                          onChange={(e) =>
+                            handleFieldsChangeInComment2(index, e)
+                          }
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          name="attribute"
+                          type="text"
+                          value={field.attribute}
+                          onChange={(e) =>
+                            handleFieldsChangeInComment2(index, e)
+                          }
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Select
+                          name="transformer"
+                          value={field.transformer}
+                          onValueChange={(value) =>
+                            handleComment2TransformerChange(index, value)
+                          }
+                        >
+                          <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="选择转换器" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectItem value={null}>None</SelectItem>
+                              {data.transformerOptions.map(
+                                (transformerOption, index) => (
+                                  <SelectItem
+                                    key={index}
+                                    value={transformerOption.key}
+                                  >
+                                    {transformerOption.label}
+                                  </SelectItem>
+                                )
+                              )}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          name="transformerArg"
+                          type="text"
+                          value={field.transformerArg}
+                          onChange={(e) =>
+                            handleFieldsChangeInComment2(index, e)
+                          }
+                        />
+                      </TableCell>
+
+                      <TableCell>
+                        <Button
+                          onClick={(e) => removeFieldsInComment2(index, e)}
+                        >
+                          删除
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+
+              <Button
+                className="w-48"
+                onClick={(e) => addEmptyFieldInComment2(e)}
+              >
+                添加二级评论字段映射
+              </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
-	
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
 
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>动作配置</DialogTitle>
-            <DialogDescription>
-            </DialogDescription>
+            <DialogDescription></DialogDescription>
           </DialogHeader>
           <div className="grid gap-4">
-		  
             <div className="grid gap-3">
               <Label htmlFor="username-1">执行阶段</Label>
-                  <Select id="action-phase" name="action-phase" value={ currentAction.phase} onValueChange={ handleActionPhaseChange}>
-				  <SelectTrigger className="w-[180px]">
-					<SelectValue placeholder="选择阶段" />
-				  </SelectTrigger>
-				  <SelectContent>
-					<SelectGroup>	
-					     <SelectItem value={null}>None</SelectItem>
-						{data.phaseOptions.map((phaseOption, index) => (
-							
-						  <SelectItem key={index} value={phaseOption.key}>{phaseOption.label}</SelectItem>
-						))
-						}					
-
-					</SelectGroup>
-				  </SelectContent>
-				</Select>
-            </div>		  
-		  
-            <div className="grid gap-3">
-              <Label htmlFor="name-1">动作名</Label>
-                <Select id="action-name" name="action-name" value={ currentAction.name} onValueChange={ handleActionNameChange}>
-				  <SelectTrigger className="w-[180px]">
-					<SelectValue placeholder="选择动作" />
-				  </SelectTrigger>
-				  <SelectContent>
-					<SelectGroup>
-					     <SelectItem value={null}>None</SelectItem>
-						{data.actionOptions.map((actionOption, index) => (
-							
-						  <SelectItem key={index} value={actionOption.key}>{actionOption.label}</SelectItem>
-						))
-						}
-
-
-					</SelectGroup>
-				  </SelectContent>
-				</Select>			  
-			  
-              
+              <Select
+                id="action-phase"
+                name="action-phase"
+                value={currentAction.phase}
+                onValueChange={handleActionPhaseChange}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="选择阶段" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value={null}>None</SelectItem>
+                    {data.phaseOptions.map((phaseOption, index) => (
+                      <SelectItem key={index} value={phaseOption.key}>
+                        {phaseOption.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
 
-			 <div className="grid gap-3">
-			 { actionConfigForm(currentAction)}
-			 </div>
+            <div className="grid gap-3">
+              <Label htmlFor="name-1">动作名</Label>
+              <Select
+                id="action-name"
+                name="action-name"
+                value={currentAction.name}
+                onValueChange={handleActionNameChange}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="选择动作" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value={null}>None</SelectItem>
+                    {data.actionOptions.map((actionOption, index) => (
+                      <SelectItem key={index} value={actionOption.key}>
+                        {actionOption.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid gap-3">{actionConfigForm(currentAction)}</div>
           </div>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline" onClick={(e) => cancelAction(e)}>取消</Button>
+              <Button variant="outline" onClick={(e) => cancelAction(e)}>
+                取消
+              </Button>
             </DialogClose>
-            <Button type="submit" onClick={(e) => saveAction(e)}>保存</Button>
+            <Button type="submit" onClick={(e) => saveAction(e)}>
+              保存
+            </Button>
           </DialogFooter>
         </DialogContent>
-
-      </Dialog>		
-
-
+      </Dialog>
     </div>
   );
-}
-);
+});
 
-
-export {
-  FeedConfigForm,
-}
+export { FeedConfigForm };

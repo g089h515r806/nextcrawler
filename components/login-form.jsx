@@ -1,36 +1,32 @@
-'use client'
-import React, { useState,useActionState } from 'react';
+'use client';
+import React, { useState, useActionState } from 'react';
 //import { login } from '@/app/actions/auth'
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from '@/components/ui/card';
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
 
-export function LoginForm({
-  className,
-  loginAction,
-  ...props 
-}) {
+export function LoginForm({ className, loginAction, ...props }) {
   const [state, action, pending] = useActionState(loginAction, {
-		//success:false,
-		name:"",
-		password:"",
-		message:""		
-	});
-  console.log("state", state);
+    //success:false,
+    name: '',
+    password: '',
+    message: '',
+  });
+  console.log('state', state);
   /*
   const [item, setItem] = useState({
     name: '',
@@ -87,11 +83,10 @@ export function LoginForm({
   };	
 	*/
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Next Crawler</CardTitle>
-
         </CardHeader>
         <CardContent>
           <form action={action}>
@@ -99,23 +94,35 @@ export function LoginForm({
               <div> {state?.message && <p>{state.message}</p>}</div>
               <Field>
                 <FieldLabel htmlFor="name">用户名</FieldLabel>
-                <Input id="name" name="name" defaultValue={state?.name} type="text" required />
+                <Input
+                  id="name"
+                  name="name"
+                  defaultValue={state?.name}
+                  type="text"
+                  required
+                />
               </Field>
               <Field>
                 <div className="flex items-center">
                   <FieldLabel htmlFor="password">密码</FieldLabel>
                 </div>
-                <Input id="password" name="password" defaultValue={state?.name} type="password" required />
+                <Input
+                  id="password"
+                  name="password"
+                  defaultValue={state?.name}
+                  type="password"
+                  required
+                />
               </Field>
               <Field>
-                <Button disabled={pending} type="submit">登录</Button>
-
+                <Button disabled={pending} type="submit">
+                  登录
+                </Button>
               </Field>
             </FieldGroup>
           </form>
         </CardContent>
       </Card>
-
     </div>
   );
 }
