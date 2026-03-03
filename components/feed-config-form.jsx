@@ -2,7 +2,7 @@
 'use client';
 import React, {
   useState,
-  useEffect,
+  useLayoutEffect,
   forwardRef,
   useImperativeHandle,
 } from 'react';
@@ -60,6 +60,7 @@ import {
   WaitForTimeoutConfigForm,
   GotoConfigForm,
   FillConfigForm,
+  SelectOptionConfigForm,
   WheelConfigForm,
   LoopClickConfigForm,
   DefaultConfigForm,
@@ -112,57 +113,6 @@ const data = {
 };
 
 const FeedConfigForm = forwardRef((props, ref) => {
-  useImperativeHandle(ref, () => ({
-    getValue: () => {
-      //console.log("useImperativeHandle getValue");
-      //过滤name 为空的字段，
-      let fieldsTmp = [...fields];
-      fieldsTmp = fieldsTmp.filter((ele, idx) => ele.name != '');
-
-      let fieldsTmpInItem = [...fieldsInItem];
-      fieldsTmpInItem = fieldsTmpInItem.filter((ele, idx) => ele.name != '');
-
-      let fieldsTmpInComment = [...fieldsInComment];
-      fieldsTmpInComment = fieldsTmpInComment.filter(
-        (ele, idx) => ele.name != ''
-      );
-
-      let fieldsTmpInComment2 = [...fieldsInComment2];
-      fieldsTmpInComment2 = fieldsTmpInComment2.filter(
-        (ele, idx) => ele.name != ''
-      );
-
-      let configTmp = {
-        feedParser: {
-          selector: selector,
-          fields: fieldsTmp,
-        },
-        pagination: pagination,
-        itemParser: {
-          disableScrapeItem: disableScrapeItem,
-          disableAutoScrapeContent: disableAutoScrapeContent,
-          downloadContentImg: downloadContentImg,
-          fields: fieldsTmpInItem,
-        },
-        videoDownload: videoDownload,
-        commentParser: {
-          scrapeComment: scrapeComment,
-          scrapeComment2: scrapeComment2,
-          commentSelector: commentSelector,
-          commentSelector2: commentSelector2,
-          fields: fieldsTmpInComment,
-          fields2: fieldsTmpInComment2,
-        },
-        feedActions: feedActions,
-        itemActions: itemActions,
-      };
-      return configTmp;
-    },
-    clear: () => {
-      //inputRef.current.value = '';
-    },
-  }));
-
   const [selector, setSelector] = React.useState('');
 
   const [pagination, setPagination] = useState({
@@ -216,6 +166,57 @@ const FeedConfigForm = forwardRef((props, ref) => {
   //const [currentFeedAction, setCurrentFeedAction] = React.useState({});
 
   //const [currentItemAction, setCurrentItemAction] = React.useState({});
+
+  useImperativeHandle(ref, () => ({
+    getValue: () => {
+      //console.log("useImperativeHandle getValue");
+      //过滤name 为空的字段，
+      let fieldsTmp = [...fields];
+      fieldsTmp = fieldsTmp.filter((ele, idx) => ele.name != '');
+
+      let fieldsTmpInItem = [...fieldsInItem];
+      fieldsTmpInItem = fieldsTmpInItem.filter((ele, idx) => ele.name != '');
+
+      let fieldsTmpInComment = [...fieldsInComment];
+      fieldsTmpInComment = fieldsTmpInComment.filter(
+        (ele, idx) => ele.name != ''
+      );
+
+      let fieldsTmpInComment2 = [...fieldsInComment2];
+      fieldsTmpInComment2 = fieldsTmpInComment2.filter(
+        (ele, idx) => ele.name != ''
+      );
+
+      let configTmp = {
+        feedParser: {
+          selector: selector,
+          fields: fieldsTmp,
+        },
+        pagination: pagination,
+        itemParser: {
+          disableScrapeItem: disableScrapeItem,
+          disableAutoScrapeContent: disableAutoScrapeContent,
+          downloadContentImg: downloadContentImg,
+          fields: fieldsTmpInItem,
+        },
+        videoDownload: videoDownload,
+        commentParser: {
+          scrapeComment: scrapeComment,
+          scrapeComment2: scrapeComment2,
+          commentSelector: commentSelector,
+          commentSelector2: commentSelector2,
+          fields: fieldsTmpInComment,
+          fields2: fieldsTmpInComment2,
+        },
+        feedActions: feedActions,
+        itemActions: itemActions,
+      };
+      return configTmp;
+    },
+    clear: () => {
+      //inputRef.current.value = '';
+    },
+  }));
 
   const handlePaginationChange = (value, propName) => {
     //  console.log("e", e);
@@ -597,7 +598,8 @@ const FeedConfigForm = forwardRef((props, ref) => {
     //console.log("Child count updated:", newCount);
   };
 
-  useEffect(() => {
+  //const initConfig = () => {
+  useLayoutEffect(() => {
     //console.log("props", props);
     let feedConfig = props.feedConfig || {};
     //console.log("feedConfig", feedConfig);
@@ -709,8 +711,10 @@ const FeedConfigForm = forwardRef((props, ref) => {
 
     let commentSelector2Tmp = feedConfig?.commentParser?.commentSelector2 || '';
     setCommentSelector2(commentSelector2Tmp);
-  }, []);
-
+  }, [props]);
+  //}
+  
+  //initConfig();
   return (
     <div className="">
       <Tabs defaultValue="feed">
@@ -1562,4 +1566,5 @@ const FeedConfigForm = forwardRef((props, ref) => {
   );
 });
 
+FeedConfigForm.displayName = 'FeedConfigForm';
 export { FeedConfigForm };
