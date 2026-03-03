@@ -113,34 +113,89 @@ const data = {
 };
 
 const FeedConfigForm = forwardRef((props, ref) => {
-  const [selector, setSelector] = React.useState('');
+  const feedConfig = props.feedConfig || {};
 
-  const [pagination, setPagination] = useState({
-    type: 'none',
-    selector: '',
-    pattern: '',
-    initial: '',
-    increment: '',
-    num: '',
+  const [selector, setSelector] = React.useState(() => {
+    return feedConfig?.feedParser?.selector || '';
   });
 
-  const [videoDownload, setVideoDownload] = useState({
-    command: 'none',
-    options: '',
-    maxTime: '15000',
+  const [pagination, setPagination] = useState(() => {
+    return feedConfig?.pagination || { type: 'none', selector: '' };
   });
 
-  const [fields, setFields] = useState([]);
+  const [videoDownload, setVideoDownload] = useState(() => {
+    return (
+      feedConfig?.videoDownload || {
+        command: 'none',
+        options: '',
+        maxTime: '15000',
+      }
+    );
+  });
 
-  const [fieldsInItem, setFieldsInItem] = useState([]);
+  const [fields, setFields] = useState(() => {
+    return (
+      feedConfig?.feedParser?.fields || [
+        {
+          name: '',
+          selector: '',
+          attribute: '',
+          transformer: '',
+          transformerArg: '',
+        },
+      ]
+    );
+  });
 
-  const [fieldsInComment, setFieldsInComment] = useState([]);
+  const [fieldsInItem, setFieldsInItem] = useState(() => {
+    return (
+      feedConfig?.itemParser?.fields || [
+        {
+          name: '',
+          selector: '',
+          attribute: '',
+          transformer: '',
+          transformerArg: '',
+        },
+      ]
+    );
+  });
 
-  const [fieldsInComment2, setFieldsInComment2] = useState([]);
+  const [fieldsInComment, setFieldsInComment] = useState(() => {
+    return (
+      feedConfig?.commentParser?.fields || [
+        {
+          name: '',
+          selector: '',
+          attribute: '',
+          transformer: '',
+          transformerArg: '',
+        },
+      ]
+    );
+  });
 
-  const [feedActions, setFeedActions] = useState([]);
+  const [fieldsInComment2, setFieldsInComment2] = useState(() => {
+    return (
+      feedConfig?.commentParser?.fields2 || [
+        {
+          name: '',
+          selector: '',
+          attribute: '',
+          transformer: '',
+          transformerArg: '',
+        },
+      ]
+    );
+  });
 
-  const [itemActions, setItemActions] = useState([]);
+  const [feedActions, setFeedActions] = useState(() => {
+    return feedConfig?.feedActions || [];
+  });
+
+  const [itemActions, setItemActions] = useState(() => {
+    return feedConfig?.itemActions || [];
+  });
 
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [currentAction, setCurrentAction] = React.useState({});
@@ -148,16 +203,30 @@ const FeedConfigForm = forwardRef((props, ref) => {
   const [currentActionType, setCurrentActionType] = React.useState('');
   const [currentActionIndex, setCurrentActionIndex] = React.useState(-1);
 
-  const [disableScrapeItem, setDisableScrapeItem] = React.useState(false);
+  const [disableScrapeItem, setDisableScrapeItem] = React.useState(() => {
+    return feedConfig?.itemParser?.disableScrapeItem || false;
+  });
   const [disableAutoScrapeContent, setDisableAutoScrapeContent] =
-    React.useState(false);
-  const [downloadContentImg, setDownloadContentImg] = React.useState(false);
+    React.useState(() => {
+      return feedConfig?.itemParser?.disableAutoScrapeContent || false;
+    });
+  const [downloadContentImg, setDownloadContentImg] = React.useState(() => {
+    return feedConfig?.itemParser?.downloadContentImg || false;
+  });
 
-  const [scrapeComment, setScrapeComment] = React.useState(false);
-  const [scrapeComment2, setScrapeComment2] = React.useState(false);
+  const [scrapeComment, setScrapeComment] = React.useState(() => {
+    return feedConfig?.commentParser?.scrapeComment || false;
+  });
+  const [scrapeComment2, setScrapeComment2] = React.useState(() => {
+    return feedConfig?.commentParser?.scrapeComment2 || false;
+  });
 
-  const [commentSelector, setCommentSelector] = React.useState('');
-  const [commentSelector2, setCommentSelector2] = React.useState('');
+  const [commentSelector, setCommentSelector] = React.useState(() => {
+    return feedConfig?.commentParser?.commentSelector || '';
+  });
+  const [commentSelector2, setCommentSelector2] = React.useState(() => {
+    return feedConfig?.commentParser?.commentSelector2 || '';
+  });
 
   //const [feedActionDialogOpen, setFeedActionDialogOpen] = React.useState(false);
 
@@ -598,12 +667,12 @@ const FeedConfigForm = forwardRef((props, ref) => {
     //console.log("Child count updated:", newCount);
   };
 
-  //const initConfig = () => {
+  /*
   useLayoutEffect(() => {
     //console.log("props", props);
     let feedConfig = props.feedConfig || {};
     //console.log("feedConfig", feedConfig);
-
+    
     setSelector(feedConfig?.feedParser?.selector || '');
 
     setPagination(feedConfig?.pagination || { type: 'none', selector: '' });
@@ -635,6 +704,7 @@ const FeedConfigForm = forwardRef((props, ref) => {
         },
       ]);
     }
+	
 
     let fieldsTmpInItem = feedConfig?.itemParser?.fields || [];
     if (fieldsTmpInItem.length > 0) {
@@ -711,10 +781,10 @@ const FeedConfigForm = forwardRef((props, ref) => {
 
     let commentSelector2Tmp = feedConfig?.commentParser?.commentSelector2 || '';
     setCommentSelector2(commentSelector2Tmp);
+	
   }, [props]);
-  //}
-  
-  //initConfig();
+  */
+
   return (
     <div className="">
       <Tabs defaultValue="feed">
