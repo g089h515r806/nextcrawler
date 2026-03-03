@@ -1,44 +1,43 @@
 //import Image from "next/image";
-'use client'
+'use client';
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation'
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from '@/components/ui/card';
 
 export default function UserDeletePage() {
-
-  const params = useParams()
+  const params = useParams();
   const { id } = params;
   const [item, setItem] = useState({
-    id:'',
+    id: '',
     name: '',
   });
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/user/'+id, {
+      const response = await fetch('/api/user/' + id, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-	  
-	  console.log("response", response);
+
+      console.log('response', response);
       if (response.ok) {
         alert('表单提交成功!');
         // 重置表单或进行其他操作
         //setItem({ label: '', url: '' });
-		
-		//window.history.replaceState(null, '', '/proxies');
-		window.location.href = '/admin/user';
+
+        //window.history.replaceState(null, '', '/proxies');
+        window.location.href = '/admin/user';
       } else {
         alert('表单提交失败.');
       }
@@ -47,37 +46,40 @@ export default function UserDeletePage() {
       alert('表单提交失败.');
     }
   };
-  
+
   useEffect(() => {
-    fetch('/api/user/'+id)
+    fetch('/api/user/' + id)
       .then((res) => res.json())
       .then((data) => {
         setItem({
-			id: data.id || '',
-			name: data.name || '',	
-		})
+          id: data.id || '',
+          name: data.name || '',
+        });
         //setLoading(false)
-      })
-  }, []); 
+      });
+  }, []);
 
   return (
     <div className="">
       <main className="">
-      <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="text-xl"> 删除用户 </CardTitle>
-        </CardHeader>
-        <CardContent className="text-center">
-          <form>
-		     <p className="p-2">你确定要删除下面的用户么：</p>
-			 <p className="p-2">{item.name}</p>
-               <Link className="m-2" href="/admin/user">取消</Link>  <Button className="m-2" type="submit" onClick={handleSubmit}>删除</Button>
-          </form>
-        </CardContent>
-      </Card>
-
+        <Card>
+          <CardHeader className="text-center">
+            <CardTitle className="text-xl"> 删除用户 </CardTitle>
+          </CardHeader>
+          <CardContent className="text-center">
+            <form>
+              <p className="p-2">你确定要删除下面的用户么：</p>
+              <p className="p-2">{item.name}</p>
+              <Link className="m-2" href="/admin/user">
+                取消
+              </Link>{' '}
+              <Button className="m-2" type="submit" onClick={handleSubmit}>
+                删除
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
       </main>
-
     </div>
   );
 }

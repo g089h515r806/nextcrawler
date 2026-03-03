@@ -1,44 +1,43 @@
 //import Image from "next/image";
-'use client'
+'use client';
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation'
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from '@/components/ui/card';
 
 export default function ListpageDeletePage() {
-
-  const params = useParams()
+  const params = useParams();
   const { id } = params;
   const [item, setItem] = useState({
-    id:'',
-	url: '',
+    id: '',
+    url: '',
   });
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/listpage/'+id, {
+      const response = await fetch('/api/listpage/' + id, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-	  
-	  console.log("response", response);
+
+      console.log('response', response);
       if (response.ok) {
         alert('表单提交成功!');
         // 重置表单或进行其他操作
         //setItem({ label: '', url: '' });
-		
-		//window.history.replaceState(null, '', '/proxies');
-		window.location.href = '/admin/listpage';
+
+        //window.history.replaceState(null, '', '/proxies');
+        window.location.href = '/admin/listpage';
       } else {
         alert('表单提交失败.');
       }
@@ -47,37 +46,40 @@ export default function ListpageDeletePage() {
       alert('表单提交失败.');
     }
   };
-  
+
   useEffect(() => {
-    fetch('/api/listpage/'+id)
+    fetch('/api/listpage/' + id)
       .then((res) => res.json())
       .then((data) => {
         setItem({
-			id: data.id || '',
-			url: data.url || '',			
-		})
+          id: data.id || '',
+          url: data.url || '',
+        });
         //setLoading(false)
-      })
+      });
   }, []);
 
   return (
     <div className="">
       <main className="">
-      <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="text-xl"> Delete User </CardTitle>
-        </CardHeader>
-        <CardContent className="text-center">
-          <form>
-		     <p className="p-2">你确定要删除下面的分页么：</p>
-			 <p className="p-2">{item.url}</p>
-               <Link className="m-2" href="/admin/listpages">取消</Link>  <Button className="m-2" type="submit" onClick={handleSubmit}>删除</Button>
-          </form>
-        </CardContent>
-      </Card>
-
+        <Card>
+          <CardHeader className="text-center">
+            <CardTitle className="text-xl"> Delete User </CardTitle>
+          </CardHeader>
+          <CardContent className="text-center">
+            <form>
+              <p className="p-2">你确定要删除下面的分页么：</p>
+              <p className="p-2">{item.url}</p>
+              <Link className="m-2" href="/admin/listpages">
+                取消
+              </Link>{' '}
+              <Button className="m-2" type="submit" onClick={handleSubmit}>
+                删除
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
       </main>
-
     </div>
   );
 }

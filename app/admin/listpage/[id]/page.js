@@ -6,20 +6,11 @@ export default function FeedDetailPage() {
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <h2>分页详情 </h2>
         <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-           分页详情 TODO
- 
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-           分页详情开发TODO .
-          </li>
+          <li className="mb-2 tracking-[-.01em]">分页详情 TODO .</li>
+          <li className="tracking-[-.01em]">分页详情开发TODO .</li>
         </ol>
-
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-
-      </footer>
+      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center"></footer>
     </div>
   );
 }

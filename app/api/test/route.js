@@ -6,17 +6,16 @@
 //import { chromium } from 'playwright-extra';
 //import stealthPlugin from 'puppeteer-extra-plugin-stealth';
 
-import  testFetch  from "@/lib/testlib"
+import testFetch from '@/lib/testlib';
 
 export async function GET(request) {
-	
-  try{
+  try {
     await testFetch();
-	return new Response(JSON.stringify({ msg:"success" }), { status: 200 })
-  }catch (err) {
-	console.log("err", err);
-	return new Response(JSON.stringify({ msg:"error" }), { status: 500 })
-  } 	
+    return new Response(JSON.stringify({ msg: 'success' }), { status: 200 });
+  } catch (err) {
+    console.log('err', err);
+    return new Response(JSON.stringify({ msg: 'error' }), { status: 500 });
+  }
   //const res = await request.json()
   /*
     //chromium.use(stealthPlugin());
@@ -30,7 +29,7 @@ export async function GET(request) {
 	//await page.waitForTimeout(5000);
 	
 	*/
-	/*
+  /*
 	await page.goto('https://www.thinkindrupal.com/node');
 
 	// 查找并操作元素
@@ -65,10 +64,9 @@ export async function GET(request) {
 	  console.log("href", href);
 	  
     }
-*/	
+*/
 
- //	await browser.close();  
-  
+  //	await browser.close();
+
   //return Response.json({ "title":"success" })
 }
-
