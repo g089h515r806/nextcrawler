@@ -2,7 +2,6 @@
 'use client';
 import React, {
   useState,
-  useLayoutEffect,
   forwardRef,
   useImperativeHandle,
 } from 'react';
@@ -666,124 +665,6 @@ const FeedConfigForm = forwardRef((props, ref) => {
     setCurrentAction(newCurrentAction);
     //console.log("Child count updated:", newCount);
   };
-
-  /*
-  useLayoutEffect(() => {
-    //console.log("props", props);
-    let feedConfig = props.feedConfig || {};
-    //console.log("feedConfig", feedConfig);
-    
-    setSelector(feedConfig?.feedParser?.selector || '');
-
-    setPagination(feedConfig?.pagination || { type: 'none', selector: '' });
-
-    setVideoDownload(
-      feedConfig?.videoDownload || {
-        command: 'none',
-        options: '',
-        maxTime: '15000',
-      }
-    );
-
-    //let field
-    let fieldsTmp = feedConfig?.feedParser?.fields || [];
-
-    //console.log("fieldsTmp", fieldsTmp);
-
-    if (fieldsTmp.length > 0) {
-      //setFields([...fieldsTmp]);
-      setFields(fieldsTmp);
-    } else {
-      setFields([
-        {
-          name: '',
-          selector: '',
-          attribute: '',
-          transformer: '',
-          transformerArg: '',
-        },
-      ]);
-    }
-	
-
-    let fieldsTmpInItem = feedConfig?.itemParser?.fields || [];
-    if (fieldsTmpInItem.length > 0) {
-      setFieldsInItem(fieldsTmpInItem);
-    } else {
-      setFieldsInItem([
-        {
-          name: '',
-          selector: '',
-          attribute: '',
-          transformer: '',
-          transformerArg: '',
-        },
-      ]);
-    }
-
-    let fieldsTmpInComment = feedConfig?.commentParser?.fields || [];
-    if (fieldsTmpInComment.length > 0) {
-      setFieldsInComment(fieldsTmpInComment);
-    } else {
-      setFieldsInComment([
-        {
-          name: '',
-          selector: '',
-          attribute: '',
-          transformer: '',
-          transformerArg: '',
-        },
-      ]);
-    }
-
-    let fieldsTmpInComment2 = feedConfig?.commentParser?.fields2 || [];
-    if (fieldsTmpInComment2.length > 0) {
-      setFieldsInComment2(fieldsTmpInComment2);
-    } else {
-      setFieldsInComment2([
-        {
-          name: '',
-          selector: '',
-          attribute: '',
-          transformer: '',
-          transformerArg: '',
-        },
-      ]);
-    }
-
-    let feedActionsTmp = feedConfig?.feedActions || [];
-    if (feedActionsTmp.length > 0) {
-      setFeedActions(feedActionsTmp);
-    }
-    let itemActionsTmp = feedConfig?.itemActions || [];
-    if (itemActionsTmp.length > 0) {
-      setItemActions(itemActionsTmp);
-    }
-
-    let disableScrapeItemTmp =
-      feedConfig?.itemParser?.disableScrapeItem || false;
-    setDisableScrapeItem(disableScrapeItemTmp);
-    let disableAutoScrapeContentTmp =
-      feedConfig?.itemParser?.disableAutoScrapeContent || false;
-    setDisableAutoScrapeContent(disableAutoScrapeContentTmp);
-    let downloadContentImgTmp =
-      feedConfig?.itemParser?.downloadContentImg || false;
-    setDownloadContentImg(downloadContentImgTmp);
-
-    let scrapeCommentTmp = feedConfig?.commentParser?.scrapeComment || false;
-    setScrapeComment(scrapeCommentTmp);
-
-    let scrapeComment2Tmp = feedConfig?.commentParser?.scrapeComment2 || false;
-    setScrapeComment2(scrapeComment2Tmp);
-
-    let commentSelectorTmp = feedConfig?.commentParser?.commentSelector || '';
-    setCommentSelector(commentSelectorTmp);
-
-    let commentSelector2Tmp = feedConfig?.commentParser?.commentSelector2 || '';
-    setCommentSelector2(commentSelector2Tmp);
-	
-  }, [props]);
-  */
 
   return (
     <div className="">
