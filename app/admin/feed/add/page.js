@@ -81,7 +81,9 @@ export default function FeedAddPage() {
   });
 
   const [loaded, setLoaded] = useState(false);
-
+  if (templateId != '') {
+    setLoaded(true);
+  }
   //const [status, setStatus] = React.useState(false);
 
   const handleChange = (e) => {
@@ -200,10 +202,8 @@ export default function FeedAddPage() {
 
           // console.log("item.config",item.config)
         });
-    } else {
-      setLoaded(true);
     }
-  }, []);
+  }, [item, templateId]);
 
   return (
     <div className="">

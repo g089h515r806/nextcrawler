@@ -101,7 +101,7 @@ export default function UserEditPage() {
         setStatus(data.status || false);
         //setLoading(false)
       });
-  }, []);
+  }, [id]);
 
   return (
     <div className="">

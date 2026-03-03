@@ -103,7 +103,7 @@ export default function TemplateEditPage() {
         //setStatus(data.status || false);
         //setLoading(false)
       });
-  }, []);
+  }, [id]);
 
   return (
     <div className="font-sans">

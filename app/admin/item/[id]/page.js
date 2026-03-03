@@ -52,7 +52,7 @@ export default function FeedDetailPage() {
         }
         //setLoading(false)
       });
-  }, []);
+  }, [id]);
 
   return (
     <div className="font-sans grid items-center justify-items-center p-8 pb-20 sm:p-20">

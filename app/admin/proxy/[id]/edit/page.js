@@ -103,7 +103,7 @@ export default function ProxyEditPage() {
         setStatus(data.status || false);
         //setLoading(false)
       });
-  }, []);
+  }, [id]);
 
   return (
     <div className="">

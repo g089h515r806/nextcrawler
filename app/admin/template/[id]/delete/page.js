@@ -59,7 +59,7 @@ export default function TemplateDeletePage() {
         });
         //setLoading(false)
       });
-  }, []);
+  }, [id]);
 
   return (
     <div className="">

@@ -60,7 +60,7 @@ export default function ProxyDeletePage() {
         });
         //setLoading(false)
       });
-  }, []);
+  }, [id]);
 
   return (
     <div className="">

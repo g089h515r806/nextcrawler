@@ -57,7 +57,7 @@ export default function UserDeletePage() {
         });
         //setLoading(false)
       });
-  }, []);
+  }, [id]);
 
   return (
     <div className="">

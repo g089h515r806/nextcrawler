@@ -59,7 +59,7 @@ export default function LogDeletePage() {
         });
         //setLoading(false)
       });
-  }, []);
+  }, [id]);
 
   return (
     <div className="">

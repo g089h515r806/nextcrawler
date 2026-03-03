@@ -57,7 +57,7 @@ export default function ListpageDeletePage() {
         });
         //setLoading(false)
       });
-  }, []);
+  }, [id]);
 
   return (
     <div className="">

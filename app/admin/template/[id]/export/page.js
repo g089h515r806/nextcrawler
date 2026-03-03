@@ -40,7 +40,7 @@ export default function TemplateEditPage() {
         //JSON.stringify(item)
         setContent(JSON.stringify(item, null, 4));
       });
-  }, []);
+  }, [id]);
 
   return (
     <div className="font-sans">

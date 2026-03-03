@@ -59,7 +59,7 @@ export default function ItemDeletePage() {
         });
         //setLoading(false)
       });
-  }, []);
+  }, [id]);
 
   return (
     <div className="">

@@ -156,7 +156,7 @@ export default function ItemEditPage() {
         }
         //setLoading(false)
       });
-  }, []);
+  }, [id]);
 
   return (
     <div className="">

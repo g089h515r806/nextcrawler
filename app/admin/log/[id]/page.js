@@ -38,7 +38,7 @@ export default function LogDetailPage() {
         });
         //setLoading(false)
       });
-  }, []);
+  }, [id]);
 
   return (
     <div className="">

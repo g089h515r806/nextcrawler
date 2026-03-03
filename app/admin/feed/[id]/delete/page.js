@@ -59,7 +59,7 @@ export default function FeedDeletePage() {
         });
         //setLoading(false)
       });
-  }, []);
+  }, [id]);
 
   return (
     <div className="">

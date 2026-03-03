@@ -232,7 +232,7 @@ export default function FeedEditPage() {
 
         // console.log("item.config",item.config)
       });
-  }, []);
+  }, [id]);
 
   return (
     <div className="">
