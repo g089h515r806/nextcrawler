@@ -51,6 +51,7 @@
     "cross-env": "^10.1.0",
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
+    "prettier": "^3.8.1",
     "prisma": "^7.4.0",
     "shadcn": "^3.6.1",
     "tailwindcss": "^4",
